@@ -5,6 +5,7 @@ import com.moviehub.watchlistservice.POJO.Movie.AddMovieRequest;
 import com.moviehub.watchlistservice.entity.Actor;
 import com.moviehub.watchlistservice.entity.Movie;
 import com.moviehub.watchlistservice.repository.ActorRepostory;
+import com.moviehub.watchlistservice.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class ActorController {
 
     @Autowired
-    ActorRepostory actorRepostory;
+    ActorService actorService;
 
     @GetMapping("/all")
     public Iterable<Actor> getAll() {
-        return actorRepostory.findAll();
+        return actorService.getAll();
     }
 
     @GetMapping("/{id}")
     public Actor getActorById(@PathVariable("id") Long id) {
-        return actorRepostory.findById(id).get();
+        return actorService.findById(id);
     }
 
     @PostMapping("/add")
@@ -31,8 +32,8 @@ public class ActorController {
     String addNewWatchlist(@RequestBody AddActorRequest request) {
         Actor actor = new Actor();
         actor.setName(request.name());
-        actor.setLastname(request.lastName());
-        actorRepostory.save(actor);
+        actor.setLastname(request.lastname());
+        actorService.save(actor);
         return "OK";
     }
 
