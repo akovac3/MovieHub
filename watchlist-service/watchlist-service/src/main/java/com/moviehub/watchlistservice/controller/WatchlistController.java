@@ -3,8 +3,9 @@ package com.moviehub.watchlistservice.controller;
 
 import com.moviehub.watchlistservice.POJO.Watchlist.AddWatchlistRequest;
 import com.moviehub.watchlistservice.entity.Watchlist;
-import com.moviehub.watchlistservice.repository.WatchlistRepository;
+import com.moviehub.watchlistservice.service.WatchlistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,26 +13,25 @@ import org.springframework.web.bind.annotation.*;
 public class WatchlistController {
 
     @Autowired
-    private WatchlistRepository watchlistRepository;
+    private WatchlistService watchlistService;
 
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Watchlist> getAll() {
-        return watchlistRepository.findAll();
+    public ResponseEntity<Iterable<Watchlist>> getAll() {
+        return ResponseEntity.ok(watchlistService.findAll());
     }
 
     @GetMapping(path = "/{id}")
-    public @ResponseBody Iterable<Watchlist> getById(@PathVariable("id") Long id) {
-        return watchlistRepository.findById(id).stream().toList();
+    public ResponseEntity<Watchlist> getById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(watchlistService.findById(id));
     }
 
     @PostMapping(path = "/add")
-    public @ResponseBody
-    String addNewWatchlist(@RequestBody AddWatchlistRequest request) {
+    public ResponseEntity<String> addNewWatchlist(@RequestBody AddWatchlistRequest request) {
         Watchlist watchlist = new Watchlist();
         watchlist.setUserId(request.userId());
         watchlist.setName(request.name());
-        watchlistRepository.save(watchlist);
-        return "OK";
+        watchlistService.save(watchlist);
+        return ResponseEntity.ok("Watchlist added successfully.");
     }
 
 }
