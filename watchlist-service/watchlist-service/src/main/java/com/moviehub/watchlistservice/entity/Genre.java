@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name="dbo.Genre")
 public class Genre {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="GenreID")
     private Long genreId;
     @Column(name="Name")

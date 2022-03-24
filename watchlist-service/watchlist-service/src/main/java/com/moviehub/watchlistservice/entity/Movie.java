@@ -14,11 +14,9 @@ import java.util.Set;
 @Table(name="dbo.Movie")
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="MovieID")
     private Long movieId;
-    @Column(name="GenreID")
-    private Long genreId;
     @Column(name="Name")
     private String name;
     @Column(name="Grade")

@@ -14,11 +14,11 @@ import java.util.Set;
 @Table(name="dbo.Watchlist")
 public class Watchlist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="WatchlistID")
-    private int watchlistId;
+    private Long watchlistId;
     @Column(name="UserID")
-    private int userId;
+    private Long userId;
     @Column(name="Name")
     private String name;
 
