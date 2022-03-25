@@ -1,18 +1,19 @@
-package com.user.user;
+package com.etf.unsa.ba.nwt.user.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.sun.istack.NotNull;
 
-@Entity
+import javax.persistence.*;
+
+@Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+    @NotNull
     private String name;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     public Integer getId() {
