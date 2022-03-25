@@ -1,12 +1,23 @@
 package com.moviehub.movieservice;
 
+import com.moviehub.movieservice.models.Actor;
+import com.moviehub.movieservice.models.Genre;
+import com.moviehub.movieservice.models.Movie;
+import com.moviehub.movieservice.repositories.ActorRepository;
+import com.moviehub.movieservice.repositories.GenreRepository;
+import com.moviehub.movieservice.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableSwagger2
 public class MovieServiceApplication implements CommandLineRunner{
 
 	@Autowired
@@ -20,9 +31,14 @@ public class MovieServiceApplication implements CommandLineRunner{
 		SpringApplication.run(MovieServiceApplication.class, args);
 	}
 
+	@Bean
+	public Docket movieApi(){
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.moviehub.movieservice.controllers")).build();
+	}
 	@Override
 	public void run(String... args) throws Exception {
-		Movie first = new Movie(
+
+		/*Movie first = new Movie(
 				"Avengers: Endgame", (float) 8.4, "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
 				2019);
 		Movie second = new Movie("The Batman", (float)8.2, "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
@@ -65,6 +81,6 @@ public class MovieServiceApplication implements CommandLineRunner{
 
 		this.movieRepository.save(first);
 		this.movieRepository.save(second);
-
+*/
 	}
 }
