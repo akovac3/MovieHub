@@ -16,15 +16,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserControllerTest {
+public class RoleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    public void getUsers() throws Exception {
+    public void getRoles() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/user/all")
+                .get("/role/all")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
@@ -33,16 +33,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void addUser() throws Exception {
+    public void addRole() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/user/add")
+                .post("/role/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        "  \"name\": \"newnew\",\n" +
-                        "  \"lastName\": \"newnew\",\n" +
-                        "  \"email\": \"test123@test123.com\",\n" +
-                        "  \"password\": \"pass\",\n" +
-                        "  \"username\": \"username\"\n" +
+                        "  \"name\": \"newRole\"\n" +
                         "}");
 
         mockMvc.perform(request)
@@ -51,9 +47,9 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void getRole() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/user/18")
+                .get("/role/38")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
