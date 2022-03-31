@@ -9,29 +9,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/watchlist")
+@RequestMapping("/api")
 public class WatchlistController {
 
     @Autowired
     private WatchlistService watchlistService;
 
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/watchlist/all")
     public ResponseEntity<Iterable<Watchlist>> getAll() {
         return ResponseEntity.ok(watchlistService.findAll());
     }
 
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/watchlist/{id}")
     public ResponseEntity<Watchlist> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(watchlistService.findById(id));
     }
 
-    @PostMapping(path = "/add")
-    public ResponseEntity<String> addNewWatchlist(@RequestBody AddWatchlistRequest request) {
-        Watchlist watchlist = new Watchlist();
-        watchlist.setUserId(request.userId());
-        watchlist.setName(request.name());
-        watchlistService.save(watchlist);
-        return ResponseEntity.ok("Watchlist added successfully.");
+    @PostMapping(path = "/watchlist/add")
+    public ResponseEntity<Watchlist> addNewWatchlist(@RequestBody AddWatchlistRequest request) {
+        return ResponseEntity.ok(watchlistService.add(request));
     }
 
 }

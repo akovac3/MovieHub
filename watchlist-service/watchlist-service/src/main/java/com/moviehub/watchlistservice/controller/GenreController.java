@@ -12,26 +12,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/genre")
+@RequestMapping("/api")
 public class GenreController {
 
     @Autowired
     GenreService genreService;
 
-    @GetMapping("/all")
+    @GetMapping("/genre/all")
     public ResponseEntity<Iterable<Genre>> getAll() {
         return ResponseEntity.ok(genreService.findAll());
     }
-    @GetMapping("/{id}")
+
+    @GetMapping("/genre/{id}")
     public ResponseEntity<Genre> getGenreById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(genreService.findById(id));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addNewGenre(@RequestBody AddGenreRequest request) {
-        Genre genre = new Genre();
-        genre.setName(request.name());
-        genreService.save(genre);
-        return ResponseEntity.ok("Genre added successfully.");
+    @PostMapping("/genre/add")
+    public ResponseEntity<Genre> addNewGenre(@RequestBody AddGenreRequest request) {
+        return ResponseEntity.ok(genreService.add(request));
     }
 }

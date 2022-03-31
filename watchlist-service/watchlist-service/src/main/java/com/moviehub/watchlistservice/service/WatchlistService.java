@@ -1,5 +1,6 @@
 package com.moviehub.watchlistservice.service;
 
+import com.moviehub.watchlistservice.POJO.Watchlist.AddWatchlistRequest;
 import com.moviehub.watchlistservice.entity.Watchlist;
 import com.moviehub.watchlistservice.exceptions.BadRequestException;
 import com.moviehub.watchlistservice.repository.MovieRepository;
@@ -33,5 +34,12 @@ public class WatchlistService {
 
     public void save(Watchlist watchlist) {
         watchlistRepository.save(watchlist);
+    }
+
+    public Watchlist add(AddWatchlistRequest request) {
+        Watchlist watchlist = new Watchlist();
+        watchlist.setUserId(request.userId());
+        watchlist.setName(request.name());
+        return watchlistRepository.save(watchlist);
     }
 }

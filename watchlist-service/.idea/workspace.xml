@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1ea1b725-861b-4eb4-a1b9-bb46e390fcfb" name="Changes" comment="" />
+    <list default="true" id="1ea1b725-861b-4eb4-a1b9-bb46e390fcfb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/POJO/Movie/AddActorForMovieRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/exceptions/ExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/exceptions/ExceptionResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/POJO/Actor/AddMovieRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/POJO/Actor/AddMovieForActorRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/controller/ActorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/controller/ActorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/controller/MovieController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Actor.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Actor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Watchlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/entity/Watchlist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/service/ActorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/service/ActorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/watchlist-service/src/main/java/com/moviehub/watchlistservice/service/MovieService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="26WPoimM3VSDGWyNOEz3SxA8Eo5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />

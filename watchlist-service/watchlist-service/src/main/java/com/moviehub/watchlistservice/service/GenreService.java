@@ -1,5 +1,6 @@
 package com.moviehub.watchlistservice.service;
 
+import com.moviehub.watchlistservice.POJO.Genre.AddGenreRequest;
 import com.moviehub.watchlistservice.entity.Genre;
 import com.moviehub.watchlistservice.exceptions.BadRequestException;
 import com.moviehub.watchlistservice.repository.GenreRepository;
@@ -30,5 +31,11 @@ public class GenreService {
 
     public void save(Genre genre) {
         genreRepository.save(genre);
+    }
+
+    public Genre add(AddGenreRequest request) {
+        Genre genre = new Genre();
+        genre.setName(request.name());
+        return genreRepository.save(genre);
     }
 }
