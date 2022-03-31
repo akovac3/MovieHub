@@ -1,9 +1,8 @@
-package com.moviehub.movieservice.controllers;
+package com.moviehub.movieservice.controller;
 
-import com.moviehub.movieservice.models.Actor;
-import com.moviehub.movieservice.models.Movie;
-import com.moviehub.movieservice.services.ActorService;
-import com.moviehub.movieservice.services.MovieService;
+import com.moviehub.movieservice.model.Actor;
+import com.moviehub.movieservice.model.Movie;
+import com.moviehub.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +18,9 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
-    @GetMapping("/all")
-    public Iterable<Movie> getAll() {
-        return movieService.getAll();
+    @GetMapping("/")
+    public ResponseEntity<Iterable<Movie>> getAll() {
+        return ResponseEntity.ok(movieService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -45,15 +44,14 @@ public class MovieController {
         return  ResponseEntity.ok(updateMovie);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<Movie> addNewMovie(@Valid @RequestBody Movie movie) {
-        Movie newMovie = movieService.save(movie);
-        return new ResponseEntity<Movie>(newMovie, HttpStatus.CREATED);
+        return new ResponseEntity<Movie>(movieService.addMovie(movie), HttpStatus.CREATED);
     }
 
-   /* @DeleteMapping("/{id}")
-    public ResponseEntity deleteMovie(@PathVariable long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMovie(@PathVariable long id){
         movieService.remove(id);
-        return ResponseEntity.ok().build();
-    }*/
+        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    }
 }

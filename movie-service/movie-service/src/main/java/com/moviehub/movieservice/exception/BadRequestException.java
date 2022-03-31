@@ -1,4 +1,4 @@
-package com.moviehub.movieservice.exceptions;
+package com.moviehub.movieservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

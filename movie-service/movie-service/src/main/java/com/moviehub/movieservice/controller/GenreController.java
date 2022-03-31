@@ -1,9 +1,8 @@
-package com.moviehub.movieservice.controllers;
+package com.moviehub.movieservice.controller;
 
-import com.moviehub.movieservice.models.Actor;
-import com.moviehub.movieservice.models.Genre;
-import com.moviehub.movieservice.services.ActorService;
-import com.moviehub.movieservice.services.GenreService;
+import com.moviehub.movieservice.model.Actor;
+import com.moviehub.movieservice.model.Genre;
+import com.moviehub.movieservice.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +18,9 @@ public class GenreController {
     @Autowired
     GenreService genreService;
 
-    @GetMapping("/all")
-    public Iterable<Genre> getAll() {
-        return genreService.getAll();
+    @GetMapping("/")
+    public ResponseEntity<Iterable<Genre>> getAll() {
+        return ResponseEntity.ok(genreService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -39,16 +38,16 @@ public class GenreController {
         return  ResponseEntity.ok(updateGenre);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<Genre> addNewGenre(@Valid @RequestBody Genre genre) {
         Genre newGenre = genreService.save(genre);
         return new ResponseEntity<Genre>(newGenre, HttpStatus.CREATED);
     }
 
-   /* @DeleteMapping("/{id}")
-    public ResponseEntity deleteGenre(@PathVariable long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGenre(@PathVariable long id){
         genreService.remove(id);
-        return ResponseEntity.ok().build();
-    }*/
+        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    }
 
 }

@@ -1,23 +1,14 @@
 package com.moviehub.movieservice;
 
-import com.moviehub.movieservice.models.Actor;
-import com.moviehub.movieservice.models.Genre;
-import com.moviehub.movieservice.models.Movie;
-import com.moviehub.movieservice.repositories.ActorRepository;
-import com.moviehub.movieservice.repositories.GenreRepository;
-import com.moviehub.movieservice.repositories.MovieRepository;
+import com.moviehub.movieservice.repositorie.ActorRepository;
+import com.moviehub.movieservice.repositorie.GenreRepository;
+import com.moviehub.movieservice.repositorie.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableSwagger2
 public class MovieServiceApplication implements CommandLineRunner{
 
 	@Autowired
@@ -30,11 +21,11 @@ public class MovieServiceApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(MovieServiceApplication.class, args);
 	}
-
-	@Bean
-	public Docket movieApi(){
-		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.moviehub.movieservice.controllers")).build();
-	}
+	/*
+        @Bean
+        public Docket movieApi(){
+            return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.moviehub.movieservice.controllers")).build();
+        }*/
 	@Override
 	public void run(String... args) throws Exception {
 

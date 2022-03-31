@@ -1,11 +1,7 @@
-package com.moviehub.movieservice.controllers;
+package com.moviehub.movieservice.controller;
 
-import com.moviehub.movieservice.models.Actor;
-import com.moviehub.movieservice.services.ActorService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.moviehub.movieservice.model.Actor;
+import com.moviehub.movieservice.service.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +17,7 @@ public class ActorController {
     @Autowired
     ActorService actorService;
 
-    @GetMapping("/all")
-    @Operation(summary = "Get all actors", responses = {
-            @ApiResponse(description = "Get all actors success", responseCode = "200",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Actor.class))),
-            @ApiResponse(description = "Get all actors fail", responseCode = "403", content = @Content)
-    })
+    @GetMapping("/")
     public ResponseEntity<Iterable<Actor>> getAll() {
         return ResponseEntity.ok(actorService.getAll());
     }
@@ -38,7 +29,7 @@ public class ActorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Actor> updateActor(@PathVariable long id,@Valid @RequestBody Actor actorDetails) {
+    public ResponseEntity<Actor> updateActor(@PathVariable Long id,@Valid @RequestBody Actor actorDetails) {
         Actor updateActor = actorService.findById(id);
         updateActor.setFirstName(actorDetails.getFirstName());
         updateActor.setLastName(actorDetails.getLastName());
@@ -49,16 +40,15 @@ public class ActorController {
         return  ResponseEntity.ok(updateActor);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     public ResponseEntity<Actor> addNewActor(@Valid @RequestBody Actor actor) {
-        Actor newActor = actorService.save(actor);
-        return new ResponseEntity<Actor>(newActor, HttpStatus.CREATED);
+        return new ResponseEntity<Actor>(actorService.addActor(actor), HttpStatus.CREATED);
     }
 
-   /* @DeleteMapping("/{id}")
-    public ResponseEntity deleteActor(@PathVariable long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActor(@PathVariable Long id){
         actorService.remove(id);
-        return ResponseEntity.ok().build();
-    }*/
+        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    }
 
 }

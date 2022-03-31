@@ -1,4 +1,4 @@
-package repositories;
+package repositorie;
 
 import com.moviehub.movieservice.models.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;

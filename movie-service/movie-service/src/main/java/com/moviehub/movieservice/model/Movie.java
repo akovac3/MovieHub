@@ -1,6 +1,11 @@
-package models;
+package com.moviehub.movieservice.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,17 +14,29 @@ public class Movie {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    @NotEmpty
+    @NotNull
     private String title;
     private Float grade;
     private String description;
     private Integer year;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "actor_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
-    private Set<Actor> actors= new HashSet<>();
-    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<com.moviehub.movieservice.model.Actor> actors= new HashSet<>();
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "genre_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -76,11 +93,11 @@ public class Movie {
         this.year = year;
     }
 
-    public Set<Actor> getActors() {
+    public Set<com.moviehub.movieservice.model.Actor> getActors() {
         return actors;
     }
 
-    public void setActors(Set<Actor> actors) {
+    public void setActors(Set<com.moviehub.movieservice.model.Actor> actors) {
         this.actors = actors;
     }
 

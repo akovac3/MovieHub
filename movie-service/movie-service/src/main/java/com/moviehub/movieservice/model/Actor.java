@@ -1,6 +1,8 @@
-package models;
+package com.moviehub.movieservice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,9 +11,17 @@ public class Actor {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    @NotBlank(message = "Input first name!")
+    @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right first name!")
     private String firstName;
+    @NotBlank(message = "Input last name!")
+    @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right last name!")
     private String lastName;
-    @ManyToMany(mappedBy = "actors")
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.MERGE
+            },
+            mappedBy = "actors")
     private Set<Movie> movies = new HashSet<>();
 
     public Actor() {
@@ -53,4 +63,6 @@ public class Actor {
     public void setMovies(Set<Movie> movies) {
         this.movies = movies;
     }
+
+    public void addMovie(Movie movie){ this.movies.add(movie);}
 }
