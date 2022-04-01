@@ -25,10 +25,11 @@ public class MovieService {
     }
 
     public Movie findById(Long id) {
-        return movieRepository.findById(id).get();
+        return movieRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Movie with provided id not found!"));
     }
 
     public Movie addMovie(Movie movie){
+
         for(Genre genre : movie.getGenres()) {
             genreRepository.findById(genre.getId()).orElseThrow(()->new ResourceNotFoundException("Genre with id = " + genre.getId() + "does not exists!"));
         }

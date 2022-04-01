@@ -1,5 +1,11 @@
 package com.moviehub.movieservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Movie;
 import com.moviehub.movieservice.service.MovieService;
@@ -18,6 +24,8 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     @GetMapping("/")
     public ResponseEntity<Iterable<Movie>> getAll() {
         return ResponseEntity.ok(movieService.getAll());
@@ -30,7 +38,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable long id,@Valid @RequestBody Movie movieDetails) {
+    public ResponseEntity<String> updateMovie(@PathVariable long id,@Valid @RequestBody Movie movieDetails) {
         Movie updateMovie = movieService.findById(id);
         updateMovie.setTitle(movieDetails.getTitle());
         updateMovie.setGrade(movieDetails.getGrade());
@@ -41,17 +49,38 @@ public class MovieController {
 
         movieService.save(updateMovie);
 
-        return  ResponseEntity.ok(updateMovie);
+        return  new ResponseEntity<>("Movie with id = " + id +" successfully updated!", HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Movie> addNewMovie(@Valid @RequestBody Movie movie) {
-        return new ResponseEntity<Movie>(movieService.addMovie(movie), HttpStatus.CREATED);
+    public ResponseEntity<String> addNewMovie(@Valid @RequestBody Movie movie) {
+        movieService.addMovie(movie);
+        return new ResponseEntity<>("Movie successfully added!", HttpStatus.CREATED);
+    }
+
+    private Movie applyPatchToMovie(
+            JsonPatch patch, Movie targetMovie) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetMovie, JsonNode.class));
+        return objectMapper.treeToValue(patched, Movie.class);
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity updateMovie(@PathVariable Long id, @RequestBody JsonPatch patch) {
+        try {
+            Movie movie = movieService.findById(id);
+            Movie moviePatched = applyPatchToMovie(patch, movie);
+            movieService.save(moviePatched);
+            return new ResponseEntity<>("Movie with id = " + id + " successfully updated!", HttpStatus.OK);
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable long id){
+    public ResponseEntity<String> deleteMovie(@PathVariable long id){
         movieService.remove(id);
-        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Movie successfully deleted!", HttpStatus.OK);
     }
 }

@@ -23,6 +23,8 @@ public class GenreService {
     }
 
     public void remove(Long id){
+        Genre genre = genreRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Genre with id = " + id + " does not exists!"));
         genreRepository.deleteById(id);
     }
+
 }
