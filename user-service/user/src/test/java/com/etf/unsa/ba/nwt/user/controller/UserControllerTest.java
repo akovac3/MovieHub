@@ -35,15 +35,29 @@ public class UserControllerTest {
     @Test
     public void addUser() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/api/persons")
+                .post("/user/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"name\": \"newnew\",\n" +
-                        "  \"email\": \"test@test.com\"\n" +
+                        "  \"lastName\": \"newnew\",\n" +
+                        "  \"email\": \"test123@test123.com\",\n" +
+                        "  \"password\": \"pass\",\n" +
+                        "  \"username\": \"username\"\n" +
                         "}");
 
         mockMvc.perform(request)
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    public void getUser() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/user/18")
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
                 .andReturn();
     }
 }
