@@ -1,12 +1,15 @@
 package com.moviehub.watchlistservice.controller;
 
+import com.moviehub.watchlistservice.POJO.Actor.AddMovieForActorRequest;
 import com.moviehub.watchlistservice.POJO.Genre.AddGenreRequest;
+import com.moviehub.watchlistservice.POJO.Genre.AddMovieForGenreRequest;
 import com.moviehub.watchlistservice.POJO.Movie.AddMovieRequest;
 import com.moviehub.watchlistservice.entity.Genre;
 import com.moviehub.watchlistservice.entity.Movie;
 import com.moviehub.watchlistservice.repository.GenreRepository;
 import com.moviehub.watchlistservice.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +34,11 @@ public class GenreController {
     @PostMapping("/genre/add")
     public ResponseEntity<Genre> addNewGenre(@RequestBody AddGenreRequest request) {
         return ResponseEntity.ok(genreService.add(request));
+    }
+
+    @PostMapping("/genre/{genreId}/movie")
+    public ResponseEntity<Movie> addMovieForGenre(@PathVariable(value = "genreId")Long genreId, @RequestBody AddMovieForGenreRequest request) {
+        Movie movie = genreService.addMovieForGenre(genreId, request);
+        return new ResponseEntity<Movie>(movie, HttpStatus.CREATED);
     }
 }

@@ -1,6 +1,10 @@
 package com.moviehub.watchlistservice.service;
 
+import com.moviehub.watchlistservice.POJO.Actor.AddMovieForActorRequest;
+import com.moviehub.watchlistservice.POJO.Watchlist.AddMovieToWatchlistRequest;
 import com.moviehub.watchlistservice.POJO.Watchlist.AddWatchlistRequest;
+import com.moviehub.watchlistservice.entity.Actor;
+import com.moviehub.watchlistservice.entity.Movie;
 import com.moviehub.watchlistservice.entity.Watchlist;
 import com.moviehub.watchlistservice.exceptions.BadRequestException;
 import com.moviehub.watchlistservice.repository.MovieRepository;
@@ -16,6 +20,9 @@ public class WatchlistService {
 
     @Autowired
     private WatchlistRepository watchlistRepository;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
 
     public Iterable<Watchlist> findAll() {
@@ -41,5 +48,34 @@ public class WatchlistService {
         watchlist.setUserId(request.userId());
         watchlist.setName(request.name());
         return watchlistRepository.save(watchlist);
+    }
+
+    public Movie addMovieToWatchlist(Long watchlistId, AddMovieToWatchlistRequest request) {
+        Optional<Movie> movieOptional = movieRepository.findById(request.movieId());
+        Optional<Watchlist> watchlistOptional = watchlistRepository.findById(watchlistId);
+
+        if(request.movieId() != 0 && !movieOptional.isPresent()) {
+            throw new BadRequestException("Movie with id=" + request.movieId() + " is missing");
+        }
+        if(!watchlistOptional.isPresent()) {
+            throw new BadRequestException("Watchlist with id=" + watchlistId + " is missing");
+        }
+
+        Watchlist watchlist = watchlistOptional.get();
+
+        if(request.movieId() != 0) {
+            Movie _movie = movieRepository.findById(request.movieId())
+                    .orElseThrow(() -> new BadRequestException("Not found movie with id = " + request.movieId()));
+            watchlist.getMovies().add(_movie);
+            watchlistRepository.save(watchlist);
+            return _movie;
+        }
+        Movie m = new Movie();
+        m.setName(request.name());
+        m.setGrade(request.grade());
+        m.setTextDescription(request.textDescription());
+        watchlist.getMovies().add(m);
+        watchlistRepository.save(watchlist);
+        return m;
     }
 }

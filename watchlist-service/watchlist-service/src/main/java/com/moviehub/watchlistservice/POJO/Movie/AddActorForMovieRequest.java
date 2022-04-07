@@ -7,6 +7,5 @@ public record AddActorForMovieRequest(
         Long actorId,
         String name,
         String lastname
-
 ) {
 }

@@ -42,7 +42,7 @@ public class ActorController {
     }
 
     @PostMapping("/actor/{actorId}/movie")
-    public ResponseEntity<Movie> addActorForMovie(@PathVariable(value = "actorId")Long actorId, @RequestBody AddMovieForActorRequest request) {
+    public ResponseEntity<Movie> addMovieForActor(@PathVariable(value = "actorId")Long actorId, @RequestBody AddMovieForActorRequest request) {
         Movie movie =  actorService.addMovieForActor(actorId, request);
         return new ResponseEntity<Movie>(movie, HttpStatus.CREATED);
     }
