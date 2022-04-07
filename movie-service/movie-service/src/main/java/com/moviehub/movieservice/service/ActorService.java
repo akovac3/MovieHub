@@ -3,9 +3,9 @@ package com.moviehub.movieservice.service;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Movie;
-import com.moviehub.movieservice.repositorie.MovieRepository;
+import com.moviehub.movieservice.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.moviehub.movieservice.repositorie.ActorRepository;
+import com.moviehub.movieservice.repository.ActorRepository;
 import org.springframework.stereotype.Service;
 
 @Service

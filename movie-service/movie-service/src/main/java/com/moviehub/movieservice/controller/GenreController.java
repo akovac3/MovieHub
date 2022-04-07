@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
-import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Genre;
 import com.moviehub.movieservice.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.moviehub.movieservice;
 
-import com.moviehub.movieservice.repositorie.ActorRepository;
-import com.moviehub.movieservice.repositorie.GenreRepository;
-import com.moviehub.movieservice.repositorie.MovieRepository;
+import com.moviehub.movieservice.repository.ActorRepository;
+import com.moviehub.movieservice.repository.GenreRepository;
+import com.moviehub.movieservice.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

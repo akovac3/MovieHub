@@ -1,4 +1,6 @@
-package model;
+package com.moviehub.movieservice.model;
+
+import com.moviehub.movieservice.model.Movie;
 
 import javax.persistence.*;
 import java.util.HashSet;
