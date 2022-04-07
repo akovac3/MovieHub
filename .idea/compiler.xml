@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="movie-service" />
-        <module name="user-service" />
         <module name="watchlist-service" />
+        <module name="user-service" />
         <module name="eureka" />
       </profile>
     </annotationProcessing>
