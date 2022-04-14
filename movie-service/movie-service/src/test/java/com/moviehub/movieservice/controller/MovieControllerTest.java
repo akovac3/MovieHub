@@ -43,7 +43,7 @@ class MovieControllerTest {
     @BeforeEach
     void setup() {
         m = new Movie("Avengers: Endgame", (float) 8.4, "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
-                2019);
+                2019, 1L);
         movieRepository.save(m);
     }
 
@@ -62,11 +62,27 @@ class MovieControllerTest {
                                 "\"title\": \"The Batman\"," +
                                 "\"grade\": 8.2," +
                                 "\"description\": \"When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.\","+
-                                "\"year\": 2022" +
+                                "\"year\": 2022," +
+                                "\"userId\": 1" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Movie successfully added!"));
+    }
+
+    @Test
+    void addMovieUnsuccessfully() throws Exception {
+        mockMvc.perform(post("/movie/")
+                        .content("{\n" +
+                                "\"title\": \"Titanic\"," +
+                                "\"grade\": 7.9," +
+                                "\"description\": \"A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic..\","+
+                                "\"year\": 1997," +
+                                "\"userId\": 2" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
     }
 
     @Test
@@ -92,7 +108,7 @@ class MovieControllerTest {
         int id = 1000;
         mockMvc.perform(delete(String.format("/movie/%d", id))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
     }
 

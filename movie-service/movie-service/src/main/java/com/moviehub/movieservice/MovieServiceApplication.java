@@ -29,7 +29,7 @@ public class MovieServiceApplication implements CommandLineRunner{
 
 	@LoadBalanced
 	@Bean
-	public RestTemplate restTemplate () { return new RestTemplate(); }
+	public RestTemplate restTemplate() { return new RestTemplate(); }
 
 	@Override
 	public void run(String... args) throws Exception {

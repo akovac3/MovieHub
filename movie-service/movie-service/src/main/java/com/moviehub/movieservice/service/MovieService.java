@@ -2,8 +2,8 @@ package com.moviehub.movieservice.service;
 import com.moviehub.movieservice.exception.BadRequestException;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.model.Actor;
-import com.moviehub.movieservice.model.Genre;
 import com.moviehub.movieservice.model.Movie;
+import com.moviehub.movieservice.model.Role;
 import com.moviehub.movieservice.model.User;
 import com.moviehub.movieservice.repository.ActorRepository;
 import com.moviehub.movieservice.repository.GenreRepository;
@@ -24,7 +24,8 @@ public class MovieService {
     @Autowired
     private ActorRepository actorRepository;
 
-    private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate ;
 
     public Iterable<Movie> getAll() {
         return movieRepository.findAll();
@@ -37,7 +38,7 @@ public class MovieService {
     public Movie addMovie(Movie movie){
         ResponseEntity<User> responseEntity = restTemplate.getForEntity("http://user-service/user/"+movie.getUserId(), User.class);
         User user = responseEntity.getBody();
-        //if(user.getRole()!=Role.ADMIN) throw new BadRequestException("This user can not add movie!");
+        if(user.getRole()!= Role.ROLE_ADMIN) throw new ResourceNotFoundException("This user can not add movie!");
         return movieRepository.save(movie);
     }
 
