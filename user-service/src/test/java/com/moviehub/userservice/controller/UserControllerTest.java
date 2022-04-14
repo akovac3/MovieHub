@@ -46,7 +46,7 @@ public class UserControllerTest {
                         "}");
 
         mockMvc.perform(request)
-                .andExpect(status().isBadRequest())
+                .andExpect(status().is4xxClientError())
                 .andReturn();
     }
 
