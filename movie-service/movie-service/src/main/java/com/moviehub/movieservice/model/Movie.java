@@ -20,6 +20,9 @@ public class Movie {
     private Float grade;
     private String description;
     private Integer year;
+
+    private Long userId;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -44,6 +47,14 @@ public class Movie {
     private Set<Genre> genres = new HashSet<>();
 
     public Movie() {
+    }
+
+    public Movie(String title, Float grade, String description, Integer year, Long userId) {
+        this.title = title;
+        this.grade = grade;
+        this.description = description;
+        this.year = year;
+        this.userId = userId;
     }
 
     public Movie(String title, Float grade, String description, Integer year) {
@@ -107,6 +118,14 @@ public class Movie {
 
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override

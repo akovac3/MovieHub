@@ -1,13 +1,17 @@
 package com.moviehub.movieservice.service;
+import com.moviehub.movieservice.exception.BadRequestException;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Genre;
 import com.moviehub.movieservice.model.Movie;
+import com.moviehub.movieservice.model.User;
 import com.moviehub.movieservice.repository.ActorRepository;
 import com.moviehub.movieservice.repository.GenreRepository;
 import com.moviehub.movieservice.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MovieService {
@@ -20,6 +24,8 @@ public class MovieService {
     @Autowired
     private ActorRepository actorRepository;
 
+    private RestTemplate restTemplate;
+
     public Iterable<Movie> getAll() {
         return movieRepository.findAll();
     }
@@ -29,14 +35,9 @@ public class MovieService {
     }
 
     public Movie addMovie(Movie movie){
-
-        for(Genre genre : movie.getGenres()) {
-            genreRepository.findById(genre.getId()).orElseThrow(()->new ResourceNotFoundException("Genre with id = " + genre.getId() + "does not exists!"));
-        }
-        for(Genre genre : movie.getGenres()){
-            Genre newGenre = genreRepository.findById(genre.getId()).get();
-            newGenre.getMovies().add(movie);
-        }
+        ResponseEntity<User> responseEntity = restTemplate.getForEntity("http://user-service/user/"+movie.getUserId(), User.class);
+        User user = responseEntity.getBody();
+        //if(user.getRole()!=Role.ADMIN) throw new BadRequestException("This user can not add movie!");
         return movieRepository.save(movie);
     }
 

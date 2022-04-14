@@ -8,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -23,11 +26,11 @@ public class MovieServiceApplication implements CommandLineRunner{
 	public static void main(String[] args) {
 		SpringApplication.run(MovieServiceApplication.class, args);
 	}
-	/*
-        @Bean
-        public Docket movieApi(){
-            return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.moviehub.movieservice.controllers")).build();
-        }*/
+
+	@LoadBalanced
+	@Bean
+	public RestTemplate restTemplate () { return new RestTemplate(); }
+
 	@Override
 	public void run(String... args) throws Exception {
 
@@ -76,4 +79,10 @@ public class MovieServiceApplication implements CommandLineRunner{
 		this.movieRepository.save(second);
 */
 	}
+
+		/*
+        @Bean
+        public Docket movieApi(){
+            return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("com.moviehub.movieservice.controllers")).build();
+        }*/
 }
