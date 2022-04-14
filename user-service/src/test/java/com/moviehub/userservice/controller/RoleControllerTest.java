@@ -42,7 +42,7 @@ public class RoleControllerTest {
                         "}");
 
         mockMvc.perform(request)
-                .andExpect(status().isOk())
+                .andExpect(status().is4xxClientError())
                 .andReturn();
     }
 
