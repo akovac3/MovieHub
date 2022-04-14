@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/config-server/config-server.iml" filepath="$PROJECT_DIR$/config-server/config-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/eureka/eureka.iml" filepath="$PROJECT_DIR$/eureka/eureka.iml" />
       <module fileurl="file://$PROJECT_DIR$/movie-service/movie-service/movie-service.iml" filepath="$PROJECT_DIR$/movie-service/movie-service/movie-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/system-events/system-events.iml" filepath="$PROJECT_DIR$/system-events/system-events.iml" />
       <module fileurl="file://$PROJECT_DIR$/user-service/user-service.iml" filepath="$PROJECT_DIR$/user-service/user-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/watchlist-service/watchlist-service/watchlist-service.iml" filepath="$PROJECT_DIR$/watchlist-service/watchlist-service/watchlist-service.iml" />
     </modules>
