@@ -1,5 +1,6 @@
 package com.moviehub.movieservice;
 
+import com.moviehub.movieservice.model.Genre;
 import com.moviehub.movieservice.repository.ActorRepository;
 import com.moviehub.movieservice.repository.GenreRepository;
 import com.moviehub.movieservice.repository.MovieRepository;
@@ -33,7 +34,6 @@ public class MovieServiceApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-
 		/*Movie first = new Movie(
 				"Avengers: Endgame", (float) 8.4, "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
 				2019);
