@@ -1,17 +1,21 @@
 package com.moviehub.watchlistservice.service;
 
 import com.moviehub.watchlistservice.POJO.Actor.AddMovieForActorRequest;
+import com.moviehub.watchlistservice.POJO.User;
 import com.moviehub.watchlistservice.POJO.Watchlist.AddMovieToWatchlistRequest;
 import com.moviehub.watchlistservice.POJO.Watchlist.AddWatchlistRequest;
 import com.moviehub.watchlistservice.entity.Actor;
 import com.moviehub.watchlistservice.entity.Movie;
 import com.moviehub.watchlistservice.entity.Watchlist;
 import com.moviehub.watchlistservice.exceptions.BadRequestException;
+import com.moviehub.watchlistservice.exceptions.ServiceUnavailableException;
 import com.moviehub.watchlistservice.repository.MovieRepository;
 import com.moviehub.watchlistservice.repository.WatchlistRepository;
 import org.springframework.beans.PropertyValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -23,6 +27,9 @@ public class WatchlistService {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
     public Iterable<Watchlist> findAll() {
@@ -77,5 +84,27 @@ public class WatchlistService {
         watchlist.getMovies().add(m);
         watchlistRepository.save(watchlist);
         return m;
+    }
+
+    public Watchlist addNewWatchlist(AddWatchlistRequest request) {
+        User user = null;
+        if(request.userId() != null) {
+            try {
+                user = restTemplate.getForObject(
+                        "http://user-service/user/" + request.userId().toString(),
+                        User.class
+                );
+            } catch (ResourceAccessException exception) {
+                throw new ServiceUnavailableException("Error in service communication");
+            }
+        }
+        if(user != null) {
+            Watchlist watchlist = new Watchlist();
+            watchlist.setUserId(request.userId());
+            watchlist.setName(request.name());
+            watchlistRepository.save(watchlist);
+            return watchlist;
+        }
+        throw new BadRequestException("User not found");
     }
 }
