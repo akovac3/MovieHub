@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -106,5 +107,9 @@ public class WatchlistService {
             return watchlist;
         }
         throw new BadRequestException("User not found");
+    }
+
+    public List<Watchlist> getWatchlistByUserId(Long userId) {
+        return watchlistRepository.findAll().stream().filter(r -> r.getUserId() == userId).toList();
     }
 }

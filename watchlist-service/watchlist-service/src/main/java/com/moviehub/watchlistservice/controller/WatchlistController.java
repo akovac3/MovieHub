@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class WatchlistController {
@@ -38,6 +40,11 @@ public class WatchlistController {
     public ResponseEntity<Movie> addMovieToWatchlist(@PathVariable(value = "watchlistId")Long watchlistId, @RequestBody AddMovieToWatchlistRequest request) {
         Movie movie = watchlistService.addMovieToWatchlist(watchlistId, request);
         return new ResponseEntity<Movie>(movie, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/watchlist/user/{userId}")
+    public ResponseEntity<List<Watchlist>> getAllWatchlistsForUser(@PathVariable(value = "userId") Long userId) {
+        return ResponseEntity.ok(watchlistService.getWatchlistByUserId(userId));
     }
 
 }
