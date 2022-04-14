@@ -91,7 +91,7 @@ public class WatchlistService {
         if(request.userId() != null) {
             try {
                 user = restTemplate.getForObject(
-                        "http://user-service/user?id=" + request.userId().toString(),
+                        "http://user-service/user/" + request.userId().toString(),
                         User.class
                 );
             } catch (ResourceAccessException exception) {

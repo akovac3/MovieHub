@@ -31,7 +31,7 @@ public class WatchlistController {
 
     @PostMapping(path = "/watchlist/add")
     public ResponseEntity<Watchlist> addNewWatchlist(@RequestBody AddWatchlistRequest request) {
-        return ResponseEntity.ok(watchlistService.add(request));
+        return ResponseEntity.ok(watchlistService.addNewWatchlist(request));
     }
 
     @PostMapping(path = "/watchlist/{watchlistId}/movie")
