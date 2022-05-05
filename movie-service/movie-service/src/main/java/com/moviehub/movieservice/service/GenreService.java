@@ -37,32 +37,32 @@ public class GenreService {
     }
 
     public Iterable<Genre> getAll() {
-        registerEvent(EventRequest.actionType.GET,"/genre/", "200");
+        registerEvent(EventRequest.actionType.GET,"/api/genre/", "200");
         return genreRepository.findAll();
     }
 
     public Genre findById(Long id) {
         Optional<Genre> genre = genreRepository.findById(id);
         if (genre.isPresent()) {
-            registerEvent(EventRequest.actionType.GET, "/genre/{id}", "200");
+            registerEvent(EventRequest.actionType.GET, "/api/genre/{id}", "200");
             return genre.get();
         } else {
-            registerEvent(EventRequest.actionType.GET, "/genre/{id}", "400");
+            registerEvent(EventRequest.actionType.GET, "/api/genre/{id}", "400");
             throw new ResourceNotFoundException("Genre with provided id not found!");
         }
     }
 
     public Genre save(Genre genre) {
-        registerEvent(EventRequest.actionType.CREATE, "/genre/", "200");
+        registerEvent(EventRequest.actionType.CREATE, "/api/genre/", "200");
         return genreRepository.save(genre);
     }
 
     public void remove(Long id){
         if (!genreRepository.existsById(id)) {
-            registerEvent(EventRequest.actionType.DELETE, "/genre/{id}", "400");
+            registerEvent(EventRequest.actionType.DELETE, "/api/genre/{id}", "400");
             throw new ResourceNotFoundException("Genre with id= " + id+ " does not exist");
         }
-        registerEvent(EventRequest.actionType.DELETE, "/genre/{id}", "200");
+        registerEvent(EventRequest.actionType.DELETE, "/api/genre/{id}", "200");
         genreRepository.deleteById(id);
     }
 

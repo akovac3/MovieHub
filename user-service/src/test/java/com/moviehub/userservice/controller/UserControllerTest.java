@@ -24,7 +24,7 @@ public class UserControllerTest {
     @Test
     public void getUsers() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/user/all")
+                .get("/api/user/all")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
@@ -35,7 +35,7 @@ public class UserControllerTest {
     @Test
     public void addUser() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/user/add")
+                .post("/api/user/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "  \"name\": \"newnew\",\n" +
@@ -53,7 +53,7 @@ public class UserControllerTest {
     @Test
     public void getUser() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/user/18")
+                .get("/api/user/18")
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)

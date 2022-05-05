@@ -52,7 +52,7 @@ class GenreControllerTest {
 
     @Test
     void getAllGenres() throws Exception {
-        mockMvc.perform(get("/genre/")
+        mockMvc.perform(get("/api/genre/")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].name").value("crime"))
@@ -61,7 +61,7 @@ class GenreControllerTest {
 
     @Test
     void addGenreSuccessfully() throws Exception {
-        mockMvc.perform(post("/genre/")
+        mockMvc.perform(post("/api/genre/")
                         .content("{\n" +
                                 "\"name\": \"documentary\"," +
                                 "\"movies\": []" +
@@ -73,7 +73,7 @@ class GenreControllerTest {
 
     @Test
     void getGenre() throws Exception {
-        mockMvc.perform(get(String.format("/genre/%d", g.getId()))
+        mockMvc.perform(get(String.format("/api/genre/%d", g.getId()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("action"));
@@ -82,7 +82,7 @@ class GenreControllerTest {
     @Test
     void deleteGenre() throws Exception {
         Long id = g.getId();
-        mockMvc.perform(delete(String.format("/genre/%d", id))
+        mockMvc.perform(delete(String.format("/api/genre/%d", id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -91,7 +91,7 @@ class GenreControllerTest {
     @Test
     void deleteGenreNotFound() throws Exception {
         int id = 1000;
-        mockMvc.perform(delete(String.format("/genre/%d", id))
+        mockMvc.perform(delete(String.format("/api/genre/%d", id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
@@ -101,7 +101,7 @@ class GenreControllerTest {
     @Test
     void updateGenre() throws Exception {
         Long id = g.getId();
-        mockMvc.perform(put(String.format("/genre/%d", id))
+        mockMvc.perform(put(String.format("/api/genre/%d", id))
                         .content("{\n" +
                                 "\"name\": \"adventure\"," +
                                 "\"movies\": []" +
@@ -114,7 +114,7 @@ class GenreControllerTest {
     @Test
     void patchGenre() throws Exception {
         Long id = g.getId();
-        mockMvc.perform(patch(String.format("/genre/%d", id))
+        mockMvc.perform(patch(String.format("/api/genre/%d", id))
                         .content( "[ {\"op\":\"replace\",\"path\":\"/name\",\"value\":\"action\"}]")
                         .contentType("application/json-patch+json"))
                 .andExpect(status().isOk())

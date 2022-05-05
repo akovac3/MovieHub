@@ -54,17 +54,17 @@ public class MovieService {
     }
 
     public Iterable<Movie> getAll() {
-        registerEvent(EventRequest.actionType.GET,"/movie/", "200");
+        registerEvent(EventRequest.actionType.GET,"/api/movie/", "200");
         return movieRepository.findAll();
     }
 
     public Movie findById(Long id) {
         Optional<Movie> movie = movieRepository.findById(id);
         if (movie.isPresent()) {
-            registerEvent(EventRequest.actionType.GET, "/movie/{id}", "200");
+            registerEvent(EventRequest.actionType.GET, "/api/movie/{id}", "200");
             return movie.get();
         } else {
-            registerEvent(EventRequest.actionType.GET, "/movie/{id}", "400");
+            registerEvent(EventRequest.actionType.GET, "/api/movie/{id}", "400");
             throw new ResourceNotFoundException("Movie with provided id not found!");
         }
     }
@@ -75,27 +75,27 @@ public class MovieService {
             responseEntity = restTemplate.getForEntity("http://user-service/user/"+movie.getUserId(), User.class);
 
         } catch (ResourceAccessException exception) {
-            registerEvent(EventRequest.actionType.CREATE, "/movie/", "503");
+            registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "503");
             throw new ServiceUnavailableException("Error while communicating with another microservice.");
         }
         User user = responseEntity.getBody();
         if(user.getRole()!= Role.ROLE_ADMIN) throw new ResourceNotFoundException("This user can not add movie!");
-        registerEvent(EventRequest.actionType.CREATE, "/movie/", "200");
+        registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "200");
         return movieRepository.save(movie);
     }
 
 
     public Movie save(Movie movie) {
-        registerEvent(EventRequest.actionType.UPDATE, "/movie/", "200");
+        registerEvent(EventRequest.actionType.UPDATE, "/api/movie/", "200");
         return movieRepository.save(movie);
     }
 
     public void remove(Long id){
         if (!movieRepository.existsById(id)) {
-            registerEvent(EventRequest.actionType.DELETE, "/movie/{id}", "400");
+            registerEvent(EventRequest.actionType.DELETE, "/api/movie/{id}", "400");
             throw new ResourceNotFoundException("Movie with id= " + id+ " does not exist");
         }
-        registerEvent(EventRequest.actionType.DELETE, "/movie/{id}", "200");
+        registerEvent(EventRequest.actionType.DELETE, "/api/movie/{id}", "200");
         Optional<Movie> movie = movieRepository.findById(id);
         for(Actor actor : movie.get().getActors()){
             movie.get().getActors().remove(actor);

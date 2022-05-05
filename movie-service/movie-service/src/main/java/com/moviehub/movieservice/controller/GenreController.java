@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/genre")
+@RequestMapping("/api/genre")
 public class GenreController {
 
     @Autowired

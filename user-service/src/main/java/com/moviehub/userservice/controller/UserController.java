@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired

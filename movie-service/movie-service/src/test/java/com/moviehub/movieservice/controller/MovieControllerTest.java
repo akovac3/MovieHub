@@ -49,7 +49,7 @@ class MovieControllerTest {
 
     @Test
     void getAllMovies() throws Exception {
-        mockMvc.perform(get("/movie/")
+        mockMvc.perform(get("/api/movie/")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].title").value("Avengers: Endgame"));
@@ -57,7 +57,7 @@ class MovieControllerTest {
 
     @Test
     void addMovieSuccessfully() throws Exception {
-        mockMvc.perform(post("/movie/")
+        mockMvc.perform(post("/api/movie/")
                         .content("{\n" +
                                 "\"title\": \"The Batman\"," +
                                 "\"grade\": 8.2," +
@@ -72,7 +72,7 @@ class MovieControllerTest {
 
     @Test
     void addMovieUnsuccessfully() throws Exception {
-        mockMvc.perform(post("/movie/")
+        mockMvc.perform(post("/api/movie/")
                         .content("{\n" +
                                 "\"title\": \"Titanic\"," +
                                 "\"grade\": 7.9," +
@@ -87,7 +87,7 @@ class MovieControllerTest {
 
     @Test
     void getMovie() throws Exception {
-        mockMvc.perform(get(String.format("/movie/%d", m.getId()))
+        mockMvc.perform(get(String.format("/api/movie/%d", m.getId()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Avengers: Endgame"));
@@ -96,7 +96,7 @@ class MovieControllerTest {
     @Test
     void deleteMovie() throws Exception {
         Long id = m.getId();
-        mockMvc.perform(delete(String.format("/movie/%d", id))
+        mockMvc.perform(delete(String.format("/api/movie/%d", id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Movie successfully deleted!"));;
@@ -106,7 +106,7 @@ class MovieControllerTest {
     @Test
     void deleteMovieNotFound() throws Exception {
         int id = 1000;
-        mockMvc.perform(delete(String.format("/movie/%d", id))
+        mockMvc.perform(delete(String.format("/api/movie/%d", id))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
@@ -116,7 +116,7 @@ class MovieControllerTest {
     @Test
     void updateMovie() throws Exception {
         Long id = m.getId();
-        mockMvc.perform(put(String.format("/movie/%d", id))
+        mockMvc.perform(put(String.format("/api/movie/%d", id))
                         .content("{\n" +
                                 "\"title\": \"Avengers\"," +
                                 "\"grade\": 8.1," +
@@ -131,7 +131,7 @@ class MovieControllerTest {
     @Test
     void patchMovie() throws Exception {
         Long id = m.getId();
-        mockMvc.perform(patch(String.format("/movie/%d", id))
+        mockMvc.perform(patch(String.format("/api/movie/%d", id))
                         .content( "[ {\"op\":\"replace\",\"path\":\"/title\",\"value\":\"Endgame\"}]")
                         .contentType("application/json-patch+json"))
                 .andExpect(status().isOk())

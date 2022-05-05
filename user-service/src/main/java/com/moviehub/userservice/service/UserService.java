@@ -41,37 +41,37 @@ public class UserService {
 
 
     public Iterable<User> getAll() {
-        registerEvent(EventRequest.actionType.GET,"/user/all", "200");
+        registerEvent(EventRequest.actionType.GET,"/api/user/all", "200");
         return userRepository.findAll();
     }
 
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            registerEvent(EventRequest.actionType.GET, "/user/{id}", "200");
+            registerEvent(EventRequest.actionType.GET, "/api/user/{id}", "200");
             return user.get();
         } else {
-            registerEvent(EventRequest.actionType.GET, "/user/{id}", "400");
+            registerEvent(EventRequest.actionType.GET, "/api/user/{id}", "400");
             throw new ResourceNotFoundException("User with provided id not found!");
         }
     }
 
     public User addUser(User user){
-        registerEvent(EventRequest.actionType.CREATE, "/user/", "200");
+        registerEvent(EventRequest.actionType.CREATE, "/api/user/", "200");
         return userRepository.save(user);
     }
 
     public User save(User user) {
-        registerEvent(EventRequest.actionType.UPDATE, "/user/", "200");
+        registerEvent(EventRequest.actionType.UPDATE, "/api/user/", "200");
         return userRepository.save(user);
     }
 
     public void remove(Long id){
         if (!userRepository.existsById(id)) {
-            registerEvent(EventRequest.actionType.DELETE, "/user/{id}", "400");
+            registerEvent(EventRequest.actionType.DELETE, "/api/user/{id}", "400");
             throw new ResourceNotFoundException("User with id= " + id+ " does not exist");
         }
-        registerEvent(EventRequest.actionType.DELETE, "/user/{id}", "200");
+        registerEvent(EventRequest.actionType.DELETE, "/api/user/{id}", "200");
         userRepository.deleteById(id);
     }
 
