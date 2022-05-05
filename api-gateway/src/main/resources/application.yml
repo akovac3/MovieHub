@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: api-gateway
+    eureka:
+      client:
+        serviceUrl:
+          defaultZone: ${EUREKA_URI}
+    zuul:
+      routes:
+        watchlist:
+          watchlist-id: watchlist-service
+
+        movie:
+          movie-id: movie-service
+
+        user:
+          user-id: user-service
+    application:
+      jwtKey: JWTKeyMoviehub
+      jwtDuration: 9999999999
+    server:
+      port: 8090
+      error:
+        include-message: always
+        include-stacktrace: never
