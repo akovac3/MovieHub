@@ -2,6 +2,8 @@ eureka:
   client:
     fetch-registry: false
     register-with-eureka: false
+  instance:
+    hostname: localhost
 logging:
   level:
     com:

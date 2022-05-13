@@ -13,9 +13,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collections;
+
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 public class SecurityConfiguration {
 
@@ -31,6 +36,8 @@ public class SecurityConfiguration {
             return new JwtHelper();
         }
 
+        private final String[] adminRoutes = {"/user-service/api/**"};
+
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
 
@@ -44,6 +51,18 @@ public class SecurityConfiguration {
             urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
             return urlBasedCorsConfigurationSource;
         }
+
+       /* @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.csrf().disable();
+            http.sessionManagement().sessionCreationPolicy(STATELESS);
+            http.authorizeRequests().antMatchers("/login", "/api/token/refresh/**").permitAll();
+            http.authorizeRequests().antMatchers(GET, "/api/watchlist/**").hasAnyAuthority("ROLE_USER");
+            http.authorizeRequests().antMatchers(POST, "/api/user/**").hasAnyAuthority("ROLE_ADMIN");
+            //http.authorizeRequests().anyRequest().authenticated();
+            http.authorizeRequests().anyRequest().permitAll();
+            http.addFilterAfter(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        }*/
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -61,11 +80,13 @@ public class SecurityConfiguration {
                     .and()
                     .addFilterAfter(new JwtFilter(jwtHelper), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/watchlist/api/**").permitAll()
-                    .antMatchers(HttpMethod.GET, "/user/api/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/user/api/auth/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/watchlist/api/**").permitAll()
                     .antMatchers(HttpMethod.GET, "/movie/api/**").permitAll()
+                    .antMatchers(adminRoutes).hasRole("ADMIN")
                     .anyRequest()
                     .authenticated();
         }
+
     }
 }

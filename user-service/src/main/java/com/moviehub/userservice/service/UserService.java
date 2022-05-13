@@ -56,6 +56,15 @@ public class UserService {
         }
     }
 
+    public User getUserByUsername(String username) {
+        registerEvent(EventRequest.actionType.GET, "/api/user/username", "200");
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> {
+                    registerEvent(EventRequest.actionType.GET, "/api/user/username", "400");
+                    return new BadRequestException("User with username " + username + " does not exist.");
+                });
+    }
+
     public User addUser(User user){
         registerEvent(EventRequest.actionType.CREATE, "/api/user/", "200");
         return userRepository.save(user);

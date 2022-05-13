@@ -1,6 +1,7 @@
 package com.moviehub.apigateway;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -18,12 +19,12 @@ public class JwtHelper implements Serializable {
         return jwtKey;
     }
 
-    @Value("${application.jwtDuration}")
+    @Value("${app.jwtDuration}")
     public void setJwtDuration(int duration) {
         JwtHelper.jwtDuration = duration;
     }
 
-    @Value("${application.jwtKey}")
+    @Value("${app.jwtKey}")
     public void setJwtKey(String jwtSecret) {
         JwtHelper.jwtKey = jwtSecret;
     }

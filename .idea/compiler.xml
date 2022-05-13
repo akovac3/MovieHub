@@ -17,7 +17,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="api-gateway" target="17" />
+      <module name="api-gateway" target="11" />
       <module name="config-server" target="17" />
       <module name="eureka" target="17" />
       <module name="movie-service" target="17" />

@@ -1,6 +1,18 @@
 package com.moviehub.userservice.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class User {
@@ -9,14 +21,33 @@ public class User {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime dateCreated;
 
+    @Column(nullable = false)
+    @NotBlank
+    @Size(min = 2, max = 50)
+    private String firstName;
+
+    @Column(nullable = false)
+    @NotBlank
+    @Size(min = 2, max = 50)
     private String lastName;
 
-    private String email;
-
+    @Column(nullable = false, unique = true)
+    @NotBlank
     private String username;
 
+    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Size(max = 320)
+    @Email
+    private String email;
+
+    @Column(nullable = false)
+    @NotBlank
+    @Size(max = 128)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -25,18 +56,17 @@ public class User {
     public User() {
     }
 
-    public User(String name, String lastName, String email, String username, String password, Role role) {
-        this.name = name;
+    public User(String name, String lastName, String email, String username, String password) {
+        this.firstName = name;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public User(Long id, String name, String lastName, String email, String username, String password) {
         this.id = id;
-        this.name = name;
+        this.firstName = name;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
@@ -51,12 +81,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
     }
 
     public String getLastName() {
@@ -97,5 +127,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public List<GrantedAuthority> fetchAuthorities() {
+        Set<Role> rl = new HashSet<>();
+        rl.add(this.getRole());
+        if (this.getRole() == Role.ROLE_ADMIN)  rl.add(Role.ROLE_ADMIN);
+        // reserved for future roles
+        return rl.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
     }
 }

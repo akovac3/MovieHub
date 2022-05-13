@@ -8,6 +8,8 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import com.moviehub.userservice.exception.BadRequestException;
 import com.moviehub.userservice.model.User;
 import com.moviehub.userservice.service.UserService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +41,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable long id,@Valid @RequestBody User userDetails) {
         User updateUser = userService.findById(id);
-        updateUser.setName(userDetails.getName());
+        updateUser.setFirstName(userDetails.getFirstName());
         updateUser.setLastName(userDetails.getLastName());
         updateUser.setUsername(userDetails.getUsername());
         updateUser.setEmail(userDetails.getEmail());
@@ -54,6 +56,14 @@ public class UserController {
     public ResponseEntity<String> addNewUser(@Valid @RequestBody User user) {
         userService.addUser(user);
         return new ResponseEntity<>("User successfully added!", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/username")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Bad request", response = BadRequestException.class)
+    })
+    public ResponseEntity<User> getUserByUsername(@RequestParam String username) {
+        return ResponseEntity.ok(userService.getUserByUsername(username));
     }
 
     private User applyPatchToUser(
