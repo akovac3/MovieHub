@@ -21,7 +21,7 @@ public class WatchlistController {
     @Autowired
     private WatchlistService watchlistService;
 
-    @GetMapping(path = "/watchlist/all")
+    @GetMapping(path = "/watchlist")
     public ResponseEntity<Iterable<Watchlist>> getAll() {
         return ResponseEntity.ok(watchlistService.findAll());
     }

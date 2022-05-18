@@ -1,11 +1,7 @@
 package com.moviehub.userservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
-import com.moviehub.userservice.exception.BadRequestException;
+
 import com.moviehub.userservice.model.User;
 import com.moviehub.userservice.service.UserService;
 import io.swagger.annotations.ApiResponse;
@@ -15,9 +11,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
+import java.util.List;
 
+
+@RestController
+@EnableSwagger2
+@RequestMapping(path = "/api")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/user")
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{username}/role/{name}")
+    public ResponseEntity<User> addRoleToUser(@PathVariable String username, @PathVariable String name) {
+        return new ResponseEntity<User>(userService.addRoleToUser(username, name), HttpStatus.OK);
+    }
+
+
+}
+/*
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
@@ -91,4 +115,4 @@ public class UserController {
         userService.remove(id);
         return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
     }
-}
+}*/

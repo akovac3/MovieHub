@@ -3,23 +3,4 @@ server:
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: movie-service
-          uri: http://localhost:8081/
-          predicates:
-            - Path=/api/movie/**
-        - id: user-service
-          uri: http://localhost:8082/
-          predicates:
-            - Path=/api/user/**
-            - Path=/api/auth/**
-        - id: watchlist-service
-          uri: http://localhost:8084/
-          predicates:
-            - Path=/api/watchlist/**
-app:
-  jwtKey: JWTKeyMoviehub
-  jwtDuration: 2147483647
 

@@ -1,17 +1,14 @@
 package com.moviehub.userservice.service;
 
-import com.google.protobuf.Timestamp;
-import com.moviehub.userservice.event.EventRequest;
-import com.moviehub.userservice.event.EventResponse;
-import com.moviehub.userservice.event.EventServiceGrpc;
+import com.moviehub.userservice.exception.ApiError;
 import com.moviehub.userservice.exception.BadRequestException;
 import com.moviehub.userservice.exception.ResourceNotFoundException;
+import com.moviehub.userservice.model.Role;
 import com.moviehub.userservice.model.User;
 //import com.moviehub.userservice.repository.RoleRepository;
+import com.moviehub.userservice.repository.RoleRepository;
 import com.moviehub.userservice.repository.UserRepository;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
+import com.moviehub.userservice.security.PBKDF2Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +16,59 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@Transactional
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private PBKDF2Encoder passwordEncoder;
+
+    public User createUser(User user) {
+        if (!userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail()).isEmpty())
+            throw new ApiError("Validation", "Username or email already exists!");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public Mono<User> getByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found!");
+        }
+        return Mono.justOrEmpty(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User addRoleToUser(String username, String name) {
+        Role role = roleRepository.findByName(name);
+        if (role == null)
+            throw new ApiError("Not found", "Role with name does not exist!");
+        User user = userRepository.findByUsername(username);
+        if (user == null)
+            throw new ApiError("Not found", "User with username does not exist!");
+        user.getRoles().add(role);
+        roleRepository.save(role);
+        return null;
+    }
+}
+
+/*
 @Service
 public class UserService {
     @Autowired
@@ -112,3 +162,4 @@ public class UserService {
         channel.shutdown();
     }
 }
+*/

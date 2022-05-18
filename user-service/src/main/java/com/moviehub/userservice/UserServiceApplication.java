@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-
+/*
 @SpringBootApplication
 public class UserServiceApplication implements CommandLineRunner {
 
@@ -30,5 +31,29 @@ public class UserServiceApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		//User user1 = new User("neko", "nekic", "nnekic1@etf.unsa.ba", "password", "nnekic1", Role.ROLE_USER);
 		//this.userRepository.save(user1);
+	}
+}*/
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
+
+@Configuration
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+public class UserServiceApplication {
+
+	@LoadBalanced
+	@Bean
+	RestTemplate restTemplate(){
+		return new RestTemplate();
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(UserServiceApplication.class, args);
 	}
 }
