@@ -17,10 +17,10 @@ class About extends Component {
             <div className="nine columns main-col">
               <h2>About Us</h2>
 
-              <p>Moviehub aplikacija</p>
+              <p>Moviehub WebApplication</p>
               <div className="row">
                 <div className="columns contact-details">
-                  <h2>Contact Details</h2>
+                  <h2>Created by:</h2>
                   <p className="address">
                     <span>Adna Fejzić</span>
                     <br />
@@ -29,21 +29,16 @@ class About extends Component {
                     <span>Rijad Handžić</span>
                     <br />
                   </p>
+                  <p>
+                    <span>© MovieHub</span>
+                    <br />
+                    <span>NWT 2022</span>
+                    <br />
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-
-          <Col span={8}>
-                © QuizHub
-                <Button type="text" href={"https://github.com/rhandzic1/NWT-projekat"}>
-                    <GithubFilled className="footer-icon"/>
-                </Button>
-            </Col>
-
-            <Col span={8}>
-                NWT 2022
-            </Col>
         </Fade>
       </section>
     );

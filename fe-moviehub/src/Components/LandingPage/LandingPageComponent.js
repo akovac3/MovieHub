@@ -32,7 +32,7 @@ const LandingPage = ({ param }) => {
 
             <li>
               <a className="smoothscroll" href="#resume">
-                Resume
+                Watchlist
               </a>
             </li>
 
