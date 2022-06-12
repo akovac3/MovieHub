@@ -27,7 +27,8 @@ public class Role {
     @Column(name = "role_id")
     private Integer roleID;
     @NotBlank(message = "Name of role is mandatory")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ERole name;
 
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
@@ -36,7 +37,7 @@ public class Role {
             mappedBy = "roles")
     private List<User> users = new ArrayList<>();
 
-    public Role(String name) {
+    public Role(ERole name) {
         this.name = name;
     }
 
@@ -60,11 +61,11 @@ public class Role {
         this.roleID = roleID;
     }
 
-    public String getName() {
+    public ERole getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(ERole name) {
         this.name = name;
     }
 }

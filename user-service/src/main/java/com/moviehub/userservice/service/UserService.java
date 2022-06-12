@@ -3,6 +3,7 @@ package com.moviehub.userservice.service;
 import com.moviehub.userservice.exception.ApiError;
 import com.moviehub.userservice.exception.BadRequestException;
 import com.moviehub.userservice.exception.ResourceNotFoundException;
+import com.moviehub.userservice.model.ERole;
 import com.moviehub.userservice.model.Role;
 import com.moviehub.userservice.model.User;
 //import com.moviehub.userservice.repository.RoleRepository;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import javax.xml.stream.events.EntityReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -55,17 +57,19 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addRoleToUser(String username, String name) {
-        Role role = roleRepository.findByName(name);
+    public User addRoleToUser(String username, ERole name) {
+        Optional<Role> role = roleRepository.findByName(name);
         if (role == null)
             throw new ApiError("Not found", "Role with name does not exist!");
         User user = userRepository.findByUsername(username);
         if (user == null)
             throw new ApiError("Not found", "User with username does not exist!");
-        user.getRoles().add(role);
-        roleRepository.save(role);
+        user.getRoles().add(role.get());
+        roleRepository.save(role.get());
         return null;
     }
+
+
 }
 
 /*

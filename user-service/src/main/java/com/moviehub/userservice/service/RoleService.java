@@ -1,13 +1,13 @@
 package com.moviehub.userservice.service;
 
 import com.moviehub.userservice.exception.NotFoundException;
+import com.moviehub.userservice.model.ERole;
 import com.moviehub.userservice.model.Role;
 import com.moviehub.userservice.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService {
@@ -39,8 +39,8 @@ public class RoleService {
     }
 
 
-    public Role getRole(String name) {
-        return roleRepository.findByName(name);
+    public Role getRole(ERole name) {
+        return roleRepository.findByName(name).get();
     }
 
 

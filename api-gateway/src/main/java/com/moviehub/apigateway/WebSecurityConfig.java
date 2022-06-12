@@ -37,8 +37,10 @@ public class WebSecurityConfig {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/user/login").permitAll()
+                .pathMatchers("/user/signup").permitAll()
                 .pathMatchers("/user/api/user", "/user/api/service", "/user/api/role").permitAll()
                 .pathMatchers("/main/api/watchlist").hasAuthority("ROLE_USER")
+                .pathMatchers(HttpMethod.DELETE, "main/api/watchlist/{id}").hasAuthority("ROLE_ADMIN")
                 .anyExchange().authenticated()
                 .and().build();
     }

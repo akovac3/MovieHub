@@ -51,6 +51,6 @@ public class Movie {
     List<Actor> actors;
     @ManyToMany(targetEntity = Genre.class, cascade = CascadeType.ALL, mappedBy = "movies")
     List<Genre> genres;
-    @ManyToMany(targetEntity = Watchlist.class, cascade = CascadeType.ALL, mappedBy = "movies")
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, mappedBy = "movies")
     List<Watchlist> watchlists;
 }

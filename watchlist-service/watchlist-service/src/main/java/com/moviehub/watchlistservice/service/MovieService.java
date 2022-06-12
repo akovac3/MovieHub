@@ -49,6 +49,12 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
+    public void remove(Long movie) {
+        Movie movie1 = movieRepository.getById(movie);
+
+        movieRepository.delete(movie1);
+    }
+
     public Actor addActorForMovie(Long movieId, AddActorForMovieRequest request) {
 
         Optional<Actor> actorOptional = actorRepostory.findById(request.actorId());

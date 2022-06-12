@@ -2,6 +2,7 @@ package com.moviehub.userservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import com.moviehub.userservice.model.ERole;
 import com.moviehub.userservice.model.User;
 import com.moviehub.userservice.service.UserService;
 import io.swagger.annotations.ApiResponse;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/user/{username}/role/{name}")
-    public ResponseEntity<User> addRoleToUser(@PathVariable String username, @PathVariable String name) {
+    public ResponseEntity<User> addRoleToUser(@PathVariable String username, @PathVariable ERole name) {
         return new ResponseEntity<User>(userService.addRoleToUser(username, name), HttpStatus.OK);
     }
 

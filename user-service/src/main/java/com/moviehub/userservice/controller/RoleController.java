@@ -80,6 +80,7 @@ package com.moviehub.userservice.controller;
 //    }
 //}
 
+import com.moviehub.userservice.model.ERole;
 import com.moviehub.userservice.model.Role;
 import com.moviehub.userservice.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,7 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("/role") //done
-    public ResponseEntity<Role> getAllRoles(@RequestParam(required = false) String name) {
+    public ResponseEntity<Role> getAllRoles(@RequestParam(required = false) ERole name) {
         Role role = roleService.getRole(name);
         if (role == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -117,6 +117,22 @@ public class WatchlistService {
         return m;
     }
 
+    public Movie removeMovieFromWatchlist(Long movieId, Long watchlistId) {
+        Optional<Movie> movieOptional = movieRepository.findById(movieId);
+        Optional<Watchlist> watchlistOptional = watchlistRepository.findById(watchlistId);
+
+        Watchlist watchlist = watchlistOptional.get();
+
+        if(movieId != 0) {
+            Movie _movie = movieRepository.findById(movieId)
+                    .orElseThrow(() -> new BadRequestException("Not found movie with id = " + movieId));
+            watchlist.getMovies().remove(_movie);
+            watchlistRepository.save(watchlist);
+            return _movie;
+        }
+        return movieOptional.get();
+    }
+
     public Watchlist addNewWatchlist(AddWatchlistRequest request) {
         User user = null;
         if(request.userId() != null) {

@@ -73,11 +73,15 @@ public class User {
     private String email;
 
     @CreationTimestamp
-    @FutureOrPresent
     LocalDateTime timestamp;
-    @UpdateTimestamp
-    @FutureOrPresent
-    LocalDateTime updateTimestamp;
+
+    public User(String username, String encode, String firstName, String lastName, String email) {
+        this.username = username;
+        this.password = encode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     public UUID getUserID() {
         return userID;
@@ -149,14 +153,6 @@ public class User {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public LocalDateTime getUpdateTimestamp() {
-        return updateTimestamp;
-    }
-
-    public void setUpdateTimestamp(LocalDateTime updateTimestamp) {
-        this.updateTimestamp = updateTimestamp;
     }
 
 }

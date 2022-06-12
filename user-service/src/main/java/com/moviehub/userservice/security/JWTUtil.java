@@ -1,5 +1,6 @@
 package com.moviehub.userservice.security;
 
+import com.moviehub.userservice.model.ERole;
 import com.moviehub.userservice.model.Role;
 import com.moviehub.userservice.model.User;
 import io.jsonwebtoken.Claims;
@@ -47,7 +48,7 @@ public class JWTUtil {
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> roles = new ArrayList<>();
+        List<ERole> roles = new ArrayList<>();
         for (Role r: user.getRoles())
             roles.add(r.getName());
         claims.put("role", roles);

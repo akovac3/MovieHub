@@ -1,15 +1,16 @@
 package com.moviehub.movieservice.service;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.protobuf.Timestamp;
 import com.moviehub.movieservice.event.EventRequest;
 import com.moviehub.movieservice.event.EventResponse;
 import com.moviehub.movieservice.event.EventServiceGrpc;
-import com.moviehub.movieservice.exception.BadRequestException;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.exception.ServiceUnavailableException;
 import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Movie;
 import com.moviehub.movieservice.model.Role;
 import com.moviehub.movieservice.model.User;
+import com.moviehub.movieservice.rabbitMq.RabbitMQSender;
 import com.moviehub.movieservice.repository.ActorRepository;
 import com.moviehub.movieservice.repository.GenreRepository;
 import com.moviehub.movieservice.repository.MovieRepository;
@@ -40,8 +41,18 @@ public class MovieService {
     @Autowired
     private RestTemplate restTemplate ;
 
+    private final RabbitMQSender rabbitMQSender;
+
     private static String grpcUrl;
     private static int grpcPort;
+
+    public MovieService(MovieRepository movieRepository, GenreRepository genreRepository, ActorRepository actorRepository, RestTemplate restTemplate, RabbitMQSender rabbitMQSender) {
+        this.movieRepository = movieRepository;
+        this.genreRepository = genreRepository;
+        this.actorRepository = actorRepository;
+        this.restTemplate = restTemplate;
+        this.rabbitMQSender = rabbitMQSender;
+    }
 
     @Value("${app.grpc-url}")
     public void setGrpcUrl(String grpcUrl) {
@@ -90,7 +101,7 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public void remove(Long id){
+    public void remove(Long id) throws JsonProcessingException {
         if (!movieRepository.existsById(id)) {
             registerEvent(EventRequest.actionType.DELETE, "/api/movie/{id}", "400");
             throw new ResourceNotFoundException("Movie with id= " + id+ " does not exist");
@@ -103,6 +114,15 @@ public class MovieService {
             actorRepository.save(actor);
         }
         movieRepository.deleteById(id);
+
+        try {
+            rabbitMQSender.send(movie.get());
+        } catch (JsonProcessingException exception) {
+            registerEvent(EventRequest.actionType.DELETE, "/api/movie/{id}", "500");
+            movieRepository.save(movie.get());
+            throw exception;
+        }
+
     }
 
     public static void registerEvent(EventRequest.actionType actionType, String resource, String status) {

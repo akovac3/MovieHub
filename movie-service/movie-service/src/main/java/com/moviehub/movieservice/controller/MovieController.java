@@ -79,7 +79,7 @@ public class MovieController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMovie(@PathVariable long id){
+    public ResponseEntity<String> deleteMovie(@PathVariable long id) throws JsonProcessingException {
         movieService.remove(id);
         return new ResponseEntity<>("Movie successfully deleted!", HttpStatus.OK);
     }
