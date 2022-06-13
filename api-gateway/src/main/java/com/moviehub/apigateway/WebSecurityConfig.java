@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                 .pathMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .pathMatchers(HttpMethod.POST,"/user/signup").permitAll()
                 .pathMatchers(HttpMethod.GET, "/movie/api/movie/").permitAll()
+                .pathMatchers(HttpMethod.POST, "/movie/api/movie/").permitAll()
                 .pathMatchers("/user/api/user", "/user/api/service", "/user/api/role").permitAll()
                 .pathMatchers("/main/api/watchlist").hasAuthority("ROLE_USER")
                 .pathMatchers(HttpMethod.DELETE, "main/api/watchlist/{id}").hasAuthority("ROLE_ADMIN")
