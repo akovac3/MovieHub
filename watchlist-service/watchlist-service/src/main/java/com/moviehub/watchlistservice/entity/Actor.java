@@ -47,6 +47,14 @@ public class Actor {
 //            inverseJoinColumns = @JoinColumn(name = "MovieID"))
 //    Set<Movie> movies;
 
-    @ManyToMany(targetEntity = Movie.class, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JoinTable(name = "actor_movies",
+            joinColumns = {
+                    @JoinColumn(name = "actor_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "movie_id")
+            }
+    )
     private List<Movie> movies;
 }
