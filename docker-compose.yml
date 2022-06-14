@@ -1,0 +1,144 @@
+version: '2'
+
+services:
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+    expose:
+      - "5672"
+    networks:
+      - moviehub
+
+  db:
+    image: mysql
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+  config-server:
+    image: 'config-server-docker:v1'
+    container_name: config-server
+    build:
+      context: ./config-server
+    networks:
+      - moviehub
+    environment:
+     # - CONFIG_REPO_USERNAME=
+     # - CONFIG_REPO_PASSWORD=
+     # - CONFIG_REPO_URI=
+
+
+  eureka:
+    image: 'eureka-docker:v1'
+    container_name: eureka-docker
+    build:
+      context: ./eureka
+    networks:
+      - moviehub
+    depends_on:
+      - db
+      - rabbitmq
+
+
+  system-events:
+    image: 'system-events-docker:v1'
+    container_name: system-events-docker
+    build:
+      context: ./system-events
+    networks:
+      - moviehub
+    environment:
+      - CONFIG_SERVER_URI=optional:configserver:http://config-server:8888
+    depends_on:
+      - config-server
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+
+  movie-service:
+    image: 'movie-service:v1'
+    container_name: movie-service
+    build:
+      context: ./movie-service
+    networks:
+      - moviehub
+    environment:
+      - CONFIG_SERVER_URI=optional:configserver:http://config-server:8888
+    depends_on:
+      #####
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+
+  user-service:
+    image: 'user-service:v1'
+    container_name: user-service
+    build:
+      context: ./user-service
+    networks:
+      - moviehub
+    environment:
+      - CONFIG_SERVER_URI=optional:configserver:http://config-server:8888
+    depends_on:
+    #####
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+  watchlist-service:
+    image: 'watchlist-service:v1'
+    container_name: watchlist-service
+    build:
+      context: ./watchlist-service
+    networks:
+      - moviehub
+    environment:
+      - CONFIG_SERVER_URI=optional:configserver:http://config-server:8888
+    depends_on:
+    #####
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+
+
+
+  api-gateway:
+    image: 'springcloud-gateway-docker:v1'
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+    networks:
+      - moviehub
+    environment:
+      - EUREKA_URI=http://eureka:8761/eureka
+    depends_on:
+      - tournament-service
+    ports:
+      - "8086:8086"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 5
+  ##Dodati za react
+
+networks:
+  moviehub:
+    driver: bridge
