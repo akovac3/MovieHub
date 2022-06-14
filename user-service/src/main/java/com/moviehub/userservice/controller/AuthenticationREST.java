@@ -3,6 +3,7 @@ package com.moviehub.userservice.controller;
 import com.moviehub.userservice.model.AuthRequest;
 import com.moviehub.userservice.model.AuthResponse;
 import com.moviehub.userservice.model.User;
+import com.moviehub.userservice.response.LoginResponseBody;
 import com.moviehub.userservice.security.JWTUtil;
 import com.moviehub.userservice.security.PBKDF2Encoder;
 import com.moviehub.userservice.service.AuthService;
@@ -19,7 +20,6 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RestController
 public class AuthenticationREST {
@@ -38,9 +38,21 @@ public class AuthenticationREST {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody @Valid User signupRequest) {
+    public ResponseEntity<LoginResponseBody> signup(@RequestBody @Valid User signupRequest) {
         User user = authService.signup(signupRequest);
-        return ResponseEntity.ok(user);
+        String token = String.valueOf(new AuthResponse(jwtUtil.generateToken(user)));
+        return ResponseEntity.ok().body(new LoginResponseBody(
+                "Bearer",
+                token,
+                user.getUserID(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getTimestamp(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getRoles()
+        ));
     }
 
 }

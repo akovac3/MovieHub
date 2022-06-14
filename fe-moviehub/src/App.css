@@ -2,10 +2,35 @@
     text-align: center;
     position: relative;
     min-height: 100vh;
+    background-color: #39445a;
+    padding-bottom: 70px;
+    color: aliceblue;
   }
   
   .main-container {
-    padding: 0 10px 20px 10px;
-    min-height: calc(100vh - 110px);
+    padding: 100px 10px 20px 10px;
+    min-height: calc(100vh);
+    background-color: #39445a;
+    color: aliceblue;
   }
   
+  * {
+    scroll-behavior: smooth;
+  }
+  
+  .pageTitle {
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    font-family: "Montserrat", sans-serif;
+    font-size: 2vw;
+    padding: 4px;
+    border-radius: 50px;
+    color: papayawhip;
+  }
+  
+  @media (max-width: 1000px) {
+    .pageTitle {
+      font-size: 6.4vw;
+    }
+  }

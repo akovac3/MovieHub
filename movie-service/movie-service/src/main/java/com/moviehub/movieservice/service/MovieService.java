@@ -82,15 +82,15 @@ public class MovieService {
 
     public Movie addMovie(Movie movie){
         ResponseEntity<User> responseEntity;
-        try {
-            responseEntity = restTemplate.getForEntity("http://user-service/user/"+movie.getUserId(), User.class);
+        /*try {
+            responseEntity = restTemplate.getForEntity("http://user-service/api/user/"+movie.getUserId(), User.class);
 
         } catch (ResourceAccessException exception) {
             registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "503");
             throw new ServiceUnavailableException("Error while communicating with another microservice.");
         }
         User user = responseEntity.getBody();
-        if(user.getRole()!= Role.ROLE_ADMIN) throw new ResourceNotFoundException("This user can not add movie!");
+        if(user.getRole()!= Role.ROLE_ADMIN) throw new ResourceNotFoundException("This user can not add movie!");*/
         registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "200");
         return movieRepository.save(movie);
     }
@@ -110,7 +110,6 @@ public class MovieService {
         Optional<Movie> movie = movieRepository.findById(id);
         for(Actor actor : movie.get().getActors()){
             movie.get().getActors().remove(actor);
-            actor.getMovies().remove(movie);
             actorRepository.save(actor);
         }
         movieRepository.deleteById(id);

@@ -30,27 +30,12 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private ERole name;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.MERGE
-            },
-            mappedBy = "roles")
-    private List<User> users = new ArrayList<>();
-
     public Role(ERole name) {
         this.name = name;
     }
 
     public Role() {
 
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     public Integer getRoleID() {

@@ -16,6 +16,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,7 +45,7 @@ class MovieControllerTest {
     @BeforeEach
     void setup() {
         m = new Movie("Avengers: Endgame", (float) 8.4, "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
-                2019, 1L);
+                2019, "http://www.movienewsletters.net/photos/067625R1.jpg");
         movieRepository.save(m);
     }
 

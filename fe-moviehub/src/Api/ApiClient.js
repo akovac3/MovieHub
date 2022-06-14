@@ -4,7 +4,7 @@ import { getToken } from '../utilities/localStorage'
 export const hostUrl = 'http://localhost:8089'
 
 export const basicGet = async (url) => {
-  return (await axios.get(hostUrl + url, getAuthConfig())).data
+  return (await axios.get(hostUrl + url)).data
 }
 
 export const basicDelete = async (url) => {

@@ -114,15 +114,6 @@ sx={{ mt: 3 }}
       name='email'
     />
   </Grid>
-  <Grid item xs={12}>
-    <TextField
-    value={userProfile.number} 
-      fullWidth
-      id='number'
-      label='Phone Number'
-      name='number'
-      type='tel'
-    />
   </Grid>
   <Grid item xs={12}>
     <TextField
@@ -134,16 +125,6 @@ sx={{ mt: 3 }}
       id='username'
     />
   </Grid>
-  <Grid item xs={12}>
-    <TextField
-      value={userProfile.city} 
-      fullWidth
-      name='city'
-      label='City'
-      id='city'
-    />
-  </Grid> 
-</Grid>  
 </Box>
 </Container>
 

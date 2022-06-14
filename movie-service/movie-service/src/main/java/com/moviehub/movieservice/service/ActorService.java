@@ -29,23 +29,11 @@ public class ActorService {
     }
 
     public Actor addActor(Actor actor){
-        for(Movie movie : actor.getMovies()) {
-            movieRepository.findById(movie.getId()).orElseThrow(()->new ResourceNotFoundException("Actor with id = " + movie.getId() + " does not exists!"));
-        }
-        for(Movie movie : actor.getMovies()){
-            Movie newMovie = movieRepository.findById(movie.getId()).get();
-            newMovie.getActors().add(actor);
-        }
         return actorRepository.save(actor);
     }
 
     public void remove(Long id){
         Actor actor = actorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Actor with id = " + id + " does not exists!"));
-        for(Movie movie : actor.getMovies()){
-            movie.getActors().remove(actor);
-            actor.getMovies().remove(movie);
-            movieRepository.save(movie);
-        }
         actorRepository.deleteById(id);
     }
 }

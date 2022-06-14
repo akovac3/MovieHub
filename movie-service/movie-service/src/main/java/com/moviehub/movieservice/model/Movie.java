@@ -8,38 +8,30 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity // This tells Hibernate to make a table out of this class
+@Table(name = "movies")
 public class Movie {
     @Id
+    @Column(name = "movieId", nullable = false)
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private Long movieId;
     @NotEmpty
     @NotNull
     private String title;
     private Float grade;
     private String description;
     private Integer year;
+    private String image;
 
-    private Long userId;
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "actor_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<com.moviehub.movieservice.model.Actor> actors= new HashSet<>();
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "genre_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -49,12 +41,12 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String title, Float grade, String description, Integer year, Long userId) {
+    public Movie(String title, Float grade, String description, Integer year, String image) {
         this.title = title;
         this.grade = grade;
         this.description = description;
         this.year = year;
-        this.userId = userId;
+        this.image = image;
     }
 
     public Movie(String title, Float grade, String description, Integer year) {
@@ -65,7 +57,7 @@ public class Movie {
     }
 
     public Long getId() {
-        return id;
+        return movieId;
     }
 
     public String getTitle() {
@@ -81,7 +73,7 @@ public class Movie {
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.movieId = id;
     }
 
     public void setTitle(String title) {
@@ -120,18 +112,18 @@ public class Movie {
         this.genres = genres;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getImage() {
+        return image;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
     public String toString() {
         return "Movie{" +
-                "id=" + id +
+                "id=" + movieId +
                 ", title='" + title + '\'' +
                 ", grade=" + grade +
                 ", description='" + description + '\'' +

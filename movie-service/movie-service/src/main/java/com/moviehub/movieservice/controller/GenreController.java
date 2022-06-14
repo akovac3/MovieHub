@@ -39,7 +39,6 @@ public class GenreController {
     public ResponseEntity<String> updateGenre(@PathVariable Long id,@Valid @RequestBody Genre genreDetails) {
         Genre updateGenre = genreService.findById(id);
         updateGenre.setName(genreDetails.getName());
-        updateGenre.setMovies(genreDetails.getMovies());
         genreService.save(updateGenre);
 
         return new ResponseEntity<String>("Genre with id = " + id + " successfully updated!", HttpStatus.OK);

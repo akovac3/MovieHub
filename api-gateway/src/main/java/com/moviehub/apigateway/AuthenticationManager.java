@@ -1,6 +1,5 @@
 package com.moviehub.apigateway;
 
-
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;

@@ -12,8 +12,6 @@ public class Genre {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToMany(mappedBy = "genres")
-    private Set<Movie> movies = new HashSet<>();
 
     public Genre() {
     }
@@ -36,13 +34,5 @@ public class Genre {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Set<Movie> getMovies() {
-        return movies;
-    }
-
-    public void setMovies(Set<Movie> movies) {
-        this.movies = movies;
     }
 }

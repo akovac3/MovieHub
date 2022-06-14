@@ -1,6 +1,8 @@
 import "./App.css";
 import Footer from "./Components/Sections/Footer";
 import Navbar from './Components/shared/Header'
+import Header from "./Components/Header";
+import SimpleBottomNavigation from "./Components/MainNav"
 
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -12,11 +14,10 @@ function App() {
   return (
     <div className='app-container'>
       <Router>
-        <Navbar />
+        <Header />
         <div className='main-container'>
           <MyRoutes />
         </div>
-        <Footer />
       </Router>
     </div>
   )

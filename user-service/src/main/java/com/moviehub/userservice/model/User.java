@@ -54,7 +54,6 @@ public class User {
     @Size(min=2, max=30, message = "Last name must be between 2 and 30 characters long")
     private String lastName;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

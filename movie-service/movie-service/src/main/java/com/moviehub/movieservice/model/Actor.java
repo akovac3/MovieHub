@@ -17,12 +17,6 @@ public class Actor {
     @NotBlank(message = "Input last name!")
     @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right last name!")
     private String lastName;
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.MERGE
-            },
-            mappedBy = "actors")
-    private Set<Movie> movies = new HashSet<>();
 
     public Actor() {
     }
@@ -56,13 +50,4 @@ public class Actor {
         this.id = id;
     }
 
-    public Set<Movie> getMovies() {
-        return movies;
-    }
-
-    public void setMovies(Set<Movie> movies) {
-        this.movies = movies;
-    }
-
-    public void addMovie(Movie movie){ this.movies.add(movie);}
 }

@@ -12,6 +12,7 @@ import PrivateRoute from './PrivateRoute'
 import UserPage from '../UserPage'
 import Gallery from'../Gallery'
 import CreateMovie from '../CreateMovie'
+import Watchlists from '../Components/Watchlists'
 
 const MyRoutes = () => {
     return (
@@ -22,6 +23,8 @@ const MyRoutes = () => {
         <PrivateRoute path='/userpage' component={UserPage} />
         <PrivateRoute path='/users' component={Users} />
         <Route path='/create-movie' component={CreateMovie} />
+        <Route path='/my-account' component={UserPage} />
+        <Route path='/watchlist' component={Watchlists} />
         <Route component={PageNotFound} />
       </Switch>
     )

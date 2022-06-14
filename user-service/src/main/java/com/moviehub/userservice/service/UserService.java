@@ -53,6 +53,10 @@ public class UserService {
         return Mono.justOrEmpty(user);
     }
 
+    public User getByUserId(UUID  id){
+        return userRepository.findById(id).get();
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

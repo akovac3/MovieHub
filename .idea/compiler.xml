@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="system-events" />
         <module name="config-server" />
-        <module name="springcloud-gateway" />
         <module name="eureka" />
         <module name="api-gateway" />
         <module name="movie-service" />

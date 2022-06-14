@@ -16,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
 import java.util.List;
-
+import java.util.UUID;
 
 @RestController
 @EnableSwagger2
@@ -28,6 +28,11 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUser(@PathVariable UUID id) {
+        return new ResponseEntity<User>(userService.getByUserId(id), HttpStatus.OK);
     }
 
     @GetMapping("/users")

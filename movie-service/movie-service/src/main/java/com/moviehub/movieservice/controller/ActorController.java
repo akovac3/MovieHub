@@ -41,7 +41,6 @@ public class ActorController {
         Actor updateActor = actorService.findById(id);
         updateActor.setFirstName(actorDetails.getFirstName());
         updateActor.setLastName(actorDetails.getLastName());
-        updateActor.setMovies(actorDetails.getMovies());
 
         actorService.save(updateActor);
 
