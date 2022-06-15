@@ -2,7 +2,7 @@ import { Badge } from "@material-ui/core";
 import { img_300, unavailable } from "../../config/config";
 import "./SingleContent.css";
 import ContentModal from "../ContentModal/ContentModal";
-import { Button } from "antd";
+import { Button } from "@material-ui/core";
 import { getUser } from "../../utilities/localStorage";
 import { userRole } from "../../utilities/common";
 import { useHistory } from "react-router-dom";
@@ -46,7 +46,7 @@ const SingleContent = ({
         <span className="subTitle">{date}</span>
       </span>
       {(user && <span className="subTitle">
-        {(role==="ROLE_ADMIN" && <Button onClick={handleEdit}>Edit</Button>)}
+        {(role==="ROLE_ADMIN" && <Button variant="outlined" color="secondary" onClick={handleEdit}>Edit</Button>)}
         {(role==="ROLE_USER" && <Button onClick={handleAddToWatchlist}>Add to watchlist</Button>)}
       </span>)}
       </ContentModal>

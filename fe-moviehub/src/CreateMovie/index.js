@@ -1,7 +1,9 @@
 import Multiselect from "multiselect-react-dropdown";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAllGenres } from '../Api/Movie/movie'
+import { getActors } from '../Api/Movie/movie'
 
-export default function App() {
+export default function CreateMovie() {
 
     const [values, setValues] = useState({
         title: "",
@@ -13,6 +15,9 @@ export default function App() {
     const [valid, setValid] = useState(false);
     const [actors, setActors] = useState(["Christian Bale", "Brad Pitt", "Morgan Freeman"]);
     const [genre, setGenre] = useState(["Action", "Comedy", "Thriller"]);
+    const [genres, setGenres] = useState([]);
+    const [selectedActors, setSelectedActors] = useState([]);
+    const [selectedGenres, setSelectedGenres] = useState([]);
 
     const handleMovieTitleInputChange = (event) => {
         setValues({...values, title: event.target.value})
@@ -37,6 +42,42 @@ export default function App() {
         }
         setSubmitted(true);
     }
+
+    
+  const getData = async () => {
+    try {
+      return await getAllGenres()
+    } catch (error) {
+      console.log(error)
+      console.warning(error.response.data.message)
+    }
+  }
+
+  
+  const getActor = async () => {
+    try {
+      return await getActors()
+    } catch (error) {
+      console.log(error)
+      console.warning(error.response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+        try {
+          const response = await getData()
+          console.log(response)
+          setGenres(response)
+          const glumci = await getActor()
+          setActors(glumci)
+        } catch (e) {
+          console.error(e)
+        }
+    }
+    fetchData()
+  }, [])
+
 
     return (
         <div class="form-container">
@@ -94,7 +135,8 @@ export default function App() {
                 isObject={false}
                 onRemove={function noRefCheck() {}}
                 onSelect={function noRefCheck() {}}
-                options={actors}
+                options={actors.map((actor) => (actor.firstName + " " + actor.lastName
+                    ))}
             />
             </div>
             <div>
@@ -103,7 +145,8 @@ export default function App() {
                 isObject={false}
                 onRemove={function noRefCheck() {}}
                 onSelect={function noRefCheck() {}}
-                options={genre}
+                options= {genres.map((genre) => (genre.name
+                  ))}
             />
             </div>
             <button class="form-field" type="submit">
