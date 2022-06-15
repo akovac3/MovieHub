@@ -1,56 +1,133 @@
 package com.moviehub.watchlistservice.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.lang.Nullable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name="Movie")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "movieId")
+@Entity // This tells Hibernate to make a table out of this class
+@Table(name = "movies")
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="MovieID")
+    @Column(name = "movieId", nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long movieId;
-
+    @NotEmpty
     @NotNull
-    @Column(name="Name")
-    @NotBlank(message = "Movie name cannot be empty")
-    private String name;
+    private String title;
+    private Float grade;
+    private String description;
+    private Integer year;
+    private String image;
 
-    @Nullable
-    @Column(name="Grade")
-    @Range(min = 1, max = 10, message = "Grade must be number between 1 and 10")
-    private Double grade;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "actor_movies",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    private Set<Actor> actors= new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "genre_movies",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> genres = new HashSet<>();
 
-    @Nullable
-    @Column(name="TextDescription")
-    private String textDescription;
+    public Movie() {
+    }
 
-    /*@ManyToMany(fetch = FetchType.LAZY, cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "movies")
-    Set<Actor> actors;*/
-    @ManyToMany(targetEntity = Actor.class, cascade = CascadeType.ALL, mappedBy = "movies")
-    List<Actor> actors;
-    @ManyToMany(targetEntity = Genre.class, cascade = CascadeType.ALL, mappedBy = "movies")
-    List<Genre> genres;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, mappedBy = "movies")
-    List<Watchlist> watchlists;
+    public Movie(String title, Float grade, String description, Integer year, String image) {
+        this.title = title;
+        this.grade = grade;
+        this.description = description;
+        this.year = year;
+        this.image = image;
+    }
+
+    public Movie(String title, Float grade, String description, Integer year) {
+        this.title = title;
+        this.grade = grade;
+        this.description = description;
+        this.year = year;
+    }
+
+    public Long getId() {
+        return movieId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Float getGrade() {
+        return grade;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setId(Long id) {
+        this.movieId = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setGrade(Float grade) {
+        this.grade = grade;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Set<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
+    }
+
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + movieId +
+                ", title='" + title + '\'' +
+                ", grade=" + grade +
+                ", description='" + description + '\'' +
+                ", year=" + year +
+                '}';
+    }
 }

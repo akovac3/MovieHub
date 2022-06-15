@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
       try {
         const user = getUser()
         console.log(user)
+        console.log("nesto")
       
       } catch (e) {
         console.error(e)

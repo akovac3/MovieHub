@@ -9,6 +9,12 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import { useHistory } from "react-router-dom";
 import { useUserContext } from "../AppContext";
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import { removeSession, removeRememberInfo } from '../utilities/localStorage'
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
+
 
 const useStyles = makeStyles({
   root: {
@@ -25,11 +31,16 @@ export default function SimpleBottomNavigation() {
   const [value, setValue] = React.useState(0);
   const history = useHistory();
   const { loggedIn } = useUserContext()
-  const { setLoggedIn } = useUserContext()
-  const [role, setRole]= useState('');
+  const { setLoggedIn, role } = useUserContext()
+  
+  const handleLogout = () => {
+    setLoggedIn(false)
+    removeSession()
+    removeRememberInfo()
+    window.location.reload(false);
+  }
 
   useEffect(() => {
-    setRole("ROLE_USER")
     console.log(role)
     if (value === 0) {
       history.push("/");
@@ -38,12 +49,26 @@ export default function SimpleBottomNavigation() {
     } else if (role==="ROLE_USER" && value === 2){
         history.push("/watchlist");
     }
-     else if (value === 3) {
-      history.push("/search");
-    } else if (value === 4) {
+     else if ( role==="ROLE_ADMIN" && value === 3) {
+      history.push("/actors");
+    } else if ( role==="ROLE_ADMIN" && value === 4) {
+      history.push("/genres");
+    } else if (role!=="" && value === 5) {
       history.push("/my-account");
     }
+     else if ((role==="ROLE_ADMIN" || role==="ROLE_USER") && value===6){
+        handleLogout()
+     }
+
+    else if(role!=="ROLE_ADMIN" && role!="ROLE_USER" && value===7){
+      history.push('/register')
+    }
+    else if(role!=="ROLE_ADMIN" && role!="ROLE_USER" && value===8){
+      history.push('/login')
+    }
   }, [value, history]);
+
+  
 
   return (
     <BottomNavigation
@@ -73,17 +98,47 @@ export default function SimpleBottomNavigation() {
         icon={<ViewListIcon />}
       />)}
 
+{role === 'ROLE_ADMIN' && (
       <BottomNavigationAction
         style={{ color: "white" }}
-        label="Search"
-        icon={<SearchIcon />}
-      />
+        label="Actors"
+        icon={<PersonOutlineIcon />}
+      />)}
 
+{role === 'ROLE_ADMIN' && (
+      <BottomNavigationAction
+        style={{ color: "white" }}
+        label="Genres"
+        icon={<AddReactionOutlinedIcon />}
+      />)}
+      
+{role !== '' && (
       <BottomNavigationAction
       style={{ color: "white" }}
       label="My account"
       icon={<AccountCircleIcon />}
-    />
+    />)}
+
+{role !== '' && (
+    <BottomNavigationAction
+      style={{ color: "white" }}
+      label="Log out"
+      icon={<LogoutIcon />}
+    />)}
+
+{role === '' && (
+<BottomNavigationAction
+      style={{ color: "white" }}
+      label="Sign up"
+      icon={<LoginIcon />}
+    />)}
+    {role === '' && (
+<BottomNavigationAction
+      style={{ color: "white" }}
+      label="Log in"
+      icon={<LoginIcon />}
+    />)}
+
     </BottomNavigation>
   ); 
 }

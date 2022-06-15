@@ -1,1 +1,0 @@
-import { basicGet } from 'api/common'

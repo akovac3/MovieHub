@@ -1,6 +1,6 @@
 import { basicGet, basicPut, basicPost } from '../ApiClient'
 
-const movieUrl = '/movie'
+const movieUrl = ''
 
 export const get = async (url) => {
   return await basicGet(movieUrl + url)

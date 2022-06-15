@@ -45,12 +45,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Mono<User> getByUsername(String username) {
+    public User getByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new RuntimeException("User not found!");
         }
-        return Mono.justOrEmpty(user);
+        return user;
     }
 
     public User getByUserId(UUID  id){

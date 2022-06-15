@@ -5,7 +5,7 @@ import Header from "./Components/Header";
 import SimpleBottomNavigation from "./Components/MainNav"
 
 import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, withRouter } from 'react-router-dom'
 
 //import Header from 'shared/Header'
 import MyRoutes from './routes/MyRoutes'
@@ -18,9 +18,10 @@ function App() {
         <div className='main-container'>
           <MyRoutes />
         </div>
+        <SimpleBottomNavigation />
       </Router>
     </div>
   )
 }
 
-export default App
+export default App;

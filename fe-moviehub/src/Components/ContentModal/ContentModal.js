@@ -13,6 +13,9 @@ import "./ContentModal.css";
 import { Button } from "@material-ui/core";
 import YouTubeIcon from "@material-ui/icons/YouTube";
 import Carousel from "../Carousel/Carousel";
+import { Chip } from "@material-ui/core";
+import { getUser } from "../../utilities/localStorage";
+
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -32,11 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TransitionsModal({ children, media_type, id }) {
+export default function ContentModal({ children, id }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState();
-  const [video, setVideo] = useState();
 
   const handleOpen = () => {
     setOpen(true);
@@ -47,25 +49,15 @@ export default function TransitionsModal({ children, media_type, id }) {
   };
 
   const fetchData = async () => {
-    const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${media_type}/${id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
-    );
+    const { data } = await axios.get("http://localhost:8089/movie/api/movie/"+id);
 
     setContent(data);
     // console.log(data);
   };
 
-  const fetchVideo = async () => {
-    const { data } = await axios.get(
-      `https://api.themoviedb.org/3/${media_type}/${id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
-    );
-
-    setVideo(data.results[0]?.key);
-  };
 
   useEffect(() => {
     fetchData();
-    fetchVideo();
     // eslint-disable-next-line
   }, []);
 
@@ -96,18 +88,15 @@ export default function TransitionsModal({ children, media_type, id }) {
             <div className={classes.paper}>
               <div className="ContentModal">
                 <img
-                  src={
-                    content.poster_path
-                      ? `${img_500}/${content.poster_path}`
-                      : unavailable
-                  }
+                   style={{'width':'450px', 'height':'600px', 'alignItems':'center'}}
+                   src={content.image ? `${content.image}` : unavailable}
                   alt={content.name || content.title}
                   className="ContentModal__portrait"
                 />
                 <img
                   src={
-                    content.backdrop_path
-                      ? `${img_500}/${content.backdrop_path}`
+                    content.image
+                      ? `${content.image}`
                       : unavailableLandscape
                   }
                   alt={content.name || content.title}
@@ -117,33 +106,33 @@ export default function TransitionsModal({ children, media_type, id }) {
                   <span className="ContentModal__title">
                     {content.name || content.title} (
                     {(
-                      content.first_air_date ||
+                      content.year ||
                       content.release_date ||
                       "-----"
-                    ).substring(0, 4)}
+                    )}
                     )
                   </span>
-                  {content.tagline && (
-                    <i className="tagline">{content.tagline}</i>
-                  )}
-
                   <span className="ContentModal__description">
-                    {content.overview}
+                    {content.description}
                   </span>
-
+                  
                   <div>
-                    <Carousel id={id} media_type={media_type} />
+                  <p style={{'color':'white', 'fontFamily':'Montserrat, sans-serif'}}>Actors</p>
+                    <Carousel credits={content.actors} />
                   </div>
 
-                  <Button
-                    variant="contained"
-                    startIcon={<YouTubeIcon />}
-                    color="secondary"
-                    target="__blank"
-                    href={`https://www.youtube.com/watch?v=${video}`}
-                  >
-                    Watch the Trailer
-                  </Button>
+                  <div style={{ padding: "20px 0"}}>
+                    <p style={{'marginBottom':'20px', 'color':'white', 'fontFamily':'Montserrat, sans-serif'}}>Genres</p>
+
+                  {content.genres.map((genre) => (
+        <Chip
+          style={{ margin: 2 }}
+          label={genre.name}
+          key={genre.id}
+        />
+      ))}
+                      </div>
+                 
                 </div>
               </div>
             </div>

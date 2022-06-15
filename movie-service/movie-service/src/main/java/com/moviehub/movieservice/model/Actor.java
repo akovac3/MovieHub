@@ -17,13 +17,15 @@ public class Actor {
     @NotBlank(message = "Input last name!")
     @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right last name!")
     private String lastName;
+    private String image;
 
     public Actor() {
     }
 
-    public Actor(String firstName, String lastName) {
+    public Actor(String firstName, String lastName, String image) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.image = image;
     }
 
     public String getFirstName() {
@@ -50,4 +52,11 @@ public class Actor {
         this.id = id;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

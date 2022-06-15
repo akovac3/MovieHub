@@ -1,60 +1,62 @@
 package com.moviehub.watchlistservice.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import javax.validation.constraints.Pattern;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name="Actor")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "actorId")
 public class Actor {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ActorID")
-    private Long actorId;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
+    @NotBlank(message = "Input first name!")
+    @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right first name!")
+    private String firstName;
+    @NotBlank(message = "Input last name!")
+    @Pattern(regexp = "[A-Za-z \\s]*", message = "Input right last name!")
+    private String lastName;
+    private String image;
 
-    @NotNull
-    @Column(name="Name")
-    @NotBlank(message = "Name cannot be empty")
-    private String name;
+    public Actor() {
+    }
 
-    @NotNull
-    @Column(name="Lastname")
-    @NotBlank(message = "Lastname cannot be empty")
-    private String lastname;
+    public Actor(String firstName, String lastName, String image) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.image = image;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
-//    @ManyToMany(fetch = FetchType.LAZY,
-//            cascade = {
-//                    CascadeType.PERSIST,
-//                    CascadeType.MERGE
-//            })
-//    @JoinTable(
-//            name = "MovieActorRelation",
-//            joinColumns = @JoinColumn(name = "ActorID"),
-//            inverseJoinColumns = @JoinColumn(name = "MovieID"))
-//    Set<Movie> movies;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinTable(name = "actor_movies",
-            joinColumns = {
-                    @JoinColumn(name = "actor_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "movie_id")
-            }
-    )
-    private List<Movie> movies;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

@@ -11,10 +11,8 @@ import './style/flexboxgrid.min.css'
 import './style/index.css'
 
 ReactDOM.render(
-  <React.StrictMode>
     <AppProvider>
       <App />
-    </AppProvider>
-  </React.StrictMode>,
+    </AppProvider>,
   document.getElementById('root')
 )

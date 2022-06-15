@@ -30,17 +30,48 @@ public class AuthenticationREST {
     private AuthService authService;
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<AuthResponse>> login(@RequestBody AuthRequest ar) {
-        return userService.getByUsername(ar.getUsername())
-                .filter(userDetails -> passwordEncoder.encode(ar.getPassword()).equals(userDetails.getPassword()))
-                .map(userDetails -> ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(userDetails))))
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
+    public ResponseEntity<LoginResponseBody> login(@RequestBody AuthRequest ar) {
+        User user = userService.getByUsername(ar.getUsername());
+        String token = jwtUtil.generateToken(user);
+        if(passwordEncoder.encode(ar.getPassword()).equals(user.getPassword())){
+            return ResponseEntity.ok().body(new LoginResponseBody(
+                    "Bearer",
+                    token,
+                    user.getUserID(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    user.getTimestamp(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getRoles()
+            ));
+        }
+        else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @PostMapping("/signup")
     public ResponseEntity<LoginResponseBody> signup(@RequestBody @Valid User signupRequest) {
         User user = authService.signup(signupRequest);
-        String token = String.valueOf(new AuthResponse(jwtUtil.generateToken(user)));
+        String token = jwtUtil.generateToken(user);
+        return ResponseEntity.ok().body(new LoginResponseBody(
+                "Bearer",
+                token,
+                user.getUserID(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getTimestamp(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getRoles()
+        ));
+    }
+
+    @PostMapping("/signup/admin")
+    public ResponseEntity<LoginResponseBody> signupAdmin(@RequestBody @Valid User signupRequest) {
+        User user = authService.signupAdmin(signupRequest);
+        String token = jwtUtil.generateToken(user);
         return ResponseEntity.ok().body(new LoginResponseBody(
                 "Bearer",
                 token,

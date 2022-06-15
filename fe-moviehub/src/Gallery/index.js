@@ -23,6 +23,7 @@ import Column from 'antd/lib/table/Column';
 import SingleContent from "../Components/SingleContent/SingleContent";
 import { removeSession } from '../utilities/localStorage'
 import { useUserContext } from '../AppContext'
+import SimpleBottomNavigation from '../Components/MainNav';
 
 
 import './gallery.css'
@@ -59,6 +60,7 @@ export default function Gallery() {
   useEffect(() => {
     window.scroll(0, 0);
     async function fetchData() {
+        console.log('movies')
         try {
           const response = await getAllMovies()
           console.log(response.data)

@@ -43,8 +43,8 @@ class ActorControllerTest {
     @BeforeEach
     void setup() {
         actorRepository.deleteAll();
-        a = new Actor("Robert", "Pattinson");
-        Actor a1 = new Actor("Zoe", "Kravitz");
+        a = new Actor("Robert", "Pattinson", "");
+        Actor a1 = new Actor("Zoe", "Kravitz", "");
         actorRepository.save(a1);
         actorRepository.save(a);
     }

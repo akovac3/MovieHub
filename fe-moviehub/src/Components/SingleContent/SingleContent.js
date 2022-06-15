@@ -2,6 +2,10 @@ import { Badge } from "@material-ui/core";
 import { img_300, unavailable } from "../../config/config";
 import "./SingleContent.css";
 import ContentModal from "../ContentModal/ContentModal";
+import { Button } from "antd";
+import { getUser } from "../../utilities/localStorage";
+import { userRole } from "../../utilities/common";
+import { useHistory } from "react-router-dom";
 
 const SingleContent = ({
   id,
@@ -11,8 +15,20 @@ const SingleContent = ({
   media_type,
   vote_average,
 }) => {
+  const user = getUser();
+  const role = userRole();
+  const history = useHistory()
+
+
+  function handleEdit() {
+    history.push('/edit-movie')
+  }
+
+  function handleAddToWatchlist(){
+
+  }
   return (
-<div className="media">
+    <ContentModal media_type={media_type} id={id}>
 <Badge
         badgeContent={vote_average}
         color={vote_average > 6 ? "primary" : "secondary"}
@@ -29,7 +45,11 @@ const SingleContent = ({
         {media_type === "tv" ? "TV Series" : "Movie"}
         <span className="subTitle">{date}</span>
       </span>
-      </div>
+      {(user && <span className="subTitle">
+        {(role==="ROLE_ADMIN" && <Button onClick={handleEdit}>Edit</Button>)}
+        {(role==="ROLE_USER" && <Button onClick={handleAddToWatchlist}>Add to watchlist</Button>)}
+      </span>)}
+      </ContentModal>
   );
 };
 

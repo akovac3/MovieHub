@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -29,14 +30,11 @@ public class Watchlist {
     @Column(name="Name")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinTable(name = "watchlist_movies",
-            joinColumns = {
-                    @JoinColumn(name = "watchlist_id")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "movie_id")
-            }
-    )
-    Set<Movie> movies;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "watchlist_movies",
+            joinColumns = @JoinColumn(name = "watchlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    private Set<Movie> movies = new HashSet<>();
+
 }

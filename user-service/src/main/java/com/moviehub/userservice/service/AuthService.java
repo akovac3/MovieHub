@@ -37,6 +37,29 @@ public class AuthService {
         this.roleRepository = roleRepository;
     }
 
+    public User signupAdmin(User signupRequest) {
+        if (userRepository.existsByUsernameIgnoreCase(signupRequest.getUsername())) {
+            throw new ConflictException("Username is already taken");
+        }
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+            throw new ConflictException("Email is already taken");
+        }
+        User p = new User(
+                signupRequest.getUsername(),
+                passwordEncoder.encode(signupRequest.getPassword()),
+                signupRequest.getFirstName(),
+                signupRequest.getLastName(),
+                signupRequest.getEmail()
+        );
+        // postavka role
+        List<Role> roles = new ArrayList<>();
+        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
+        p.setRoles(roles);
+        return userRepository.save(p);
+    }
+
     public User signup(User signupRequest) {
         if (userRepository.existsByUsernameIgnoreCase(signupRequest.getUsername())) {
             throw new ConflictException("Username is already taken");

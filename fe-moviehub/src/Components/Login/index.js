@@ -30,7 +30,7 @@ function Copyright(props) {
     >
       {'Copyright © '}
       <Link color='inherit' href={homeUrl}>
-        eMajstor{' '}
+        MovieHub{' '}
       </Link>
       {new Date().getFullYear()}
       {'.'}
@@ -52,7 +52,7 @@ export default function SignIn() {
       setLoading(true)
 
       const response = await login(values)
-      setRole(response.roles[0])
+      setRole(response.roles[0].name)
       message.success('Successfully logged in')
       setLoading(false)
       setSession(response)
@@ -61,6 +61,8 @@ export default function SignIn() {
       } else {
         removeRememberInfo()
       }
+      let session = JSON.stringify(response)
+      console.log(JSON.parse(session).jwt)
       history.goBack()
       setLoggedIn(true)
     } catch (error) {

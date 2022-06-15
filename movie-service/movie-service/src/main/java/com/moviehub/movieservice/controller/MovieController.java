@@ -7,7 +7,11 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
 import com.moviehub.movieservice.model.Actor;
+import com.moviehub.movieservice.model.Genre;
 import com.moviehub.movieservice.model.Movie;
+import com.moviehub.movieservice.repository.ActorRepository;
+import com.moviehub.movieservice.repository.GenreRepository;
+import com.moviehub.movieservice.request.MovieRequest;
 import com.moviehub.movieservice.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/api/movie")
@@ -25,6 +31,12 @@ public class MovieController {
     MovieService movieService;
 
     ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    ActorRepository actorRepository;
+
+    @Autowired
+    GenreRepository genreRepository;
 
     @GetMapping("/")
     public ResponseEntity<Iterable<Movie>> getAll() {
@@ -53,7 +65,31 @@ public class MovieController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> addNewMovie(@Valid @RequestBody Movie movie) {
+    public ResponseEntity<String> addNewMovie(@Valid @RequestBody MovieRequest movieRequest) {
+        Movie movie = new Movie(movieRequest.getTitle(),
+                movieRequest.getGrade(),
+                movieRequest.getDescription(),
+                movieRequest.getYear(),
+                movieRequest.getImage()
+                );
+        Set<Long> actorsSet = movieRequest.getActors();
+        Set<Long> genresSet = movieRequest.getGenres();
+
+        Set<Actor> actors = new HashSet<>();
+            actorsSet.forEach(actor -> {
+                        Actor novi = actorRepository.findById(actor)
+                                .orElseThrow(() -> new RuntimeException("Error: Actor not found."));
+                        actors.add(novi);
+                });
+         movie.setActors(actors);
+
+        Set<Genre> genres = new HashSet<>();
+        genresSet.forEach(genre -> {
+            Genre novi = genreRepository.findById(genre)
+                    .orElseThrow(() -> new RuntimeException("Error: Genre not found."));
+            genres.add(novi);
+        });
+        movie.setGenres(genres);
         movieService.addMovie(movie);
         return new ResponseEntity<>("Movie successfully added!", HttpStatus.CREATED);
     }
