@@ -6,5 +6,10 @@ Pored toga što će aplikacija imati mogućnost pregleda filmova, ona će omogu�
 
 Admin aplikacije će imati mogućnosti kreiranja filmove, glumaca i zanrova kao i editovanje filma.
 
+Članovi tima:
+- Adna Fejzić
+- Allen Kovačević
+- Rijad Handžić
+
 Kratki video aplikacije možete naći na sljedećem linku:
 https://drive.google.com/drive/folders/1xq3nLt8drdgMnPutH2wnJfuDA0HrUGb4?usp=sharing
