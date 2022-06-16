@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 import { postToWatchlist } from "../../Api/Watchlist/watchlist";
 import { message } from 'antd'
+import axios from "axios";
 
 
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -38,6 +39,16 @@ const SingleContent = ({
   function handleEdit(movieId) {
    history.push({pathname:'/edit-movie', search: '?id='+movieId,
       state: { detail: movieId}})
+  }
+
+  async function handleDelete(movieId) {
+    try{
+      await axios.post('http://localhost:8089/movie/api/movie/delete/'+movieId)
+      message.success('Movie successfully deleted')
+      window.location.reload();
+    } catch(error){
+      console.error(error)
+    }
   }
 
  async function handleAddToWatchlist(movieId){
@@ -71,6 +82,7 @@ const SingleContent = ({
       </ContentModal>
       {(user && <span className="subTitle">
         {(role==="ROLE_ADMIN" && <ColorButton variant="outlined" color="secondary" onClick={() =>{handleEdit(id)}}>Edit</ColorButton>)}
+        {(role==="ROLE_ADMIN" && <ColorButton variant="outlined" color="secondary" onClick={() =>{handleDelete(id)}}>Delete</ColorButton>)}
         {(role==="ROLE_USER" && <ColorButton onClick={() => {handleAddToWatchlist(id)}}>Add to watchlist</ColorButton>)}
       </span>)}
     </div>

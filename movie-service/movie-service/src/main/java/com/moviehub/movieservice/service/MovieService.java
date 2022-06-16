@@ -88,11 +88,6 @@ public class MovieService {
             throw new ResourceNotFoundException("Movie with id= " + id+ " does not exist");
         }
         registerEvent(EventRequest.actionType.DELETE, "/api/movie/{id}", "200");
-        Optional<Movie> movie = movieRepository.findById(id);
-        for(Actor actor : movie.get().getActors()){
-            movie.get().getActors().remove(actor);
-            actorRepository.save(actor);
-        }
         movieRepository.deleteById(id);
 
     }

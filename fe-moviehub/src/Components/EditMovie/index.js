@@ -76,13 +76,6 @@ export default function EditMovie() {
   };
 
   function handleSubimiting() {
-    setTitle('')
-    setYear('')
-    setDescription('')
-    setSelected([])
-    setSelectedGenres([])
-    setImage('')
-    setGrade('')
     setSubmitted(false)
   }
 
@@ -91,7 +84,7 @@ export default function EditMovie() {
     try {
       setLoading(true)
 
-      const response = await axios.put('http://localhost:8089/movie/api/movie/'+id, values)
+      const response = await axios.post('http://localhost:8089/movie/api/movie/'+id, values)
       message.success('Successfully saved movie')
       setLoading(false)
       handleSubimiting()
