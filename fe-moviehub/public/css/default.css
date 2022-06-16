@@ -536,9 +536,17 @@ textarea,
 select {
    display: block;
    padding: 18px 15px;
+<<<<<<< HEAD
    border: 0;
    outline: none;
    vertical-align: middle;
+=======
+   margin: auto;
+   border: 0;
+   outline: none;
+   vertical-align: middle;
+   min-width: auto;
+>>>>>>> 5d8848de67a44105fd96aeebcd2a7dee861aa4ae
 	max-width: 100%;
    font-size: 15px;
    line-height: 24px;
