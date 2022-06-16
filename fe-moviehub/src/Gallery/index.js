@@ -27,15 +27,9 @@ const theme = createTheme();
 export default function Gallery() {
     const [movies, setMovies] = useState(null);    
     const user = getUser()
-    const [watchlistId, setWatchlistId] = useState('');
     const getAllMovies = () => {
         return axios.get("http://localhost:8089/movie/api/movie/");
         }
-
-     const getWatchlistId = () => {
-            return axios.get("http://localhost:8089/user/api/user/"+user.id+ "/watchlist");
-            }
-
 
   useEffect(() => {
     window.scroll(0, 0);
@@ -43,11 +37,11 @@ export default function Gallery() {
         console.log('movies')
         try {
           const response = await getAllMovies()
-          const watchlistResponse = await getWatchlistId()
 
           console.log(response.data)
           setMovies(response.data)
-          console.log(watchlistResponse)
+
+          console.log(movies)
         } catch (e) {
           console.error(e)
         }

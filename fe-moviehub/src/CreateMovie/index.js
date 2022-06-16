@@ -2,45 +2,116 @@ import Multiselect from "multiselect-react-dropdown";
 import React, { useState, useEffect } from "react";
 import { getAllGenres } from '../Api/Movie/movie'
 import { getActors } from '../Api/Movie/movie'
+import { MenuProps, useStyles, options } from "../Components/utils";
+import Checkbox from "@material-ui/core/Checkbox";
+import InputLabel from "@material-ui/core/InputLabel";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { message } from "antd";
+import './CreateMovie.css'
+import { postMovie } from "../Api/Movie/movie";
+import { orange } from '@material-ui/core/colors';
+import { styled } from '@mui/material/styles';
+import { Button } from "@material-ui/core";
+import { Typography } from '@material-ui/core';
+
+
+const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    backgroundColor: orange[500],
+    '&:hover': {
+      backgroundColor: orange[800]
+    },
+  }));
+
 
 export default function CreateMovie() {
 
-    const [values, setValues] = useState({
-        title: "",
-        year: "",
-        description: "",
-        actors: ""
-    });
+   const [title, setTitle] = useState('');
+   const [description, setDescription] = useState('');
+   const [year, setYear] = useState('');
+   const [grade, setGrade] = useState('');
+   const [image, setImage] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [valid, setValid] = useState(false);
     const [actors, setActors] = useState(["Christian Bale", "Brad Pitt", "Morgan Freeman"]);
-    const [genre, setGenre] = useState(["Action", "Comedy", "Thriller"]);
     const [genres, setGenres] = useState([]);
-    const [selectedActors, setSelectedActors] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
+   const classes = useStyles();
+  const [selected, setSelected] = useState([]);
+  const [loading, setLoading] = React.useState(false)
 
-    const handleMovieTitleInputChange = (event) => {
-        setValues({...values, title: event.target.value})
-    }
+  const isAllSelected =
+    actors.length > 0 && selected.length === actors.length;
+    const isAllSelectedGenres =
+    genres.length > 0 && selectedGenres.length === genres.length;
 
-    const handleMovieYearInputChange = (event) => {
-        setValues({...values, year: event.target.value})
+  const handleChange = (event) => {
+    const value = event.target.value;
+    if (value[value.length - 1] === "all") {
+      setSelected(selected.length === actors.length ? [] : actors.map(actor => actor.id));
+      return;
     }
+    setSelected(value);
+  };
 
-    const handleMovieDescriptionInputChange = (event) => {
-        setValues({...values, description: event.target.value})
+  const handleChangeGenres = (event)  => {
+    const value = event.target.value;
+    if (value[value.length - 1] === "all") {
+      setSelectedGenres(selectedGenres.length === genres.length ? [] : genres.map(genre => genre.id));
+      return;
     }
+    setSelectedGenres(value);
+  };
 
-    const handleMovieActorsInputChange = (event) => {
-        setValues({...values, actors: event.target.value})
+  function handleSubimiting() {
+    setTitle('')
+    setYear('')
+    setDescription('')
+    setSelected([])
+    setSelectedGenres([])
+    setImage('')
+    setGrade('')
+    setSubmitted(false)
+  }
+
+  
+  const onFinish = async (values) => {
+    try {
+      setLoading(true)
+
+      const response = await postMovie(values)
+      message.success('Successfully saved movie')
+      setLoading(false)
+      handleSubimiting()
+    } catch (error) {
+      console.log(error)
+
+      setLoading(false)
+      message.warning(error.response.data.message)
     }
+  }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(values.title && values.year && values.description && values.actors) {
+        setSubmitted(true)
+        if(title && year && description ) {
             setValid(true);
+            const values = {
+              title: title,
+              grade: grade,
+              description: description,
+              year: year,
+              image: image,
+              actors: selected,
+              genres: selectedGenres
+            }
+            onFinish(values)
+            
         }
-        setSubmitted(true);
     }
 
     
@@ -80,14 +151,21 @@ export default function CreateMovie() {
 
 
     return (
-        <div class="form-container">
-        <h1>Create new Movie</h1>
-        <form class="register-form" onSubmit={handleSubmit}>
+      <div className='form-container' >
+
+      <Typography
+          variant = "h3"
+          color='secondary'
+          component='h2'
+          gutterBottom
+          > Create new movie</Typography>
+
+        <form  onSubmit={handleSubmit} style={{'padding':'10px'}}
+>
             {/* Uncomment the next line to show the success message */}
-            {submitted && valid ? <div class="success-message">Success! Thank you for adding new movie</div> : null}
             <input
-                onChange={handleMovieTitleInputChange}
-                value={values.title}
+                onChange={(e) => {setTitle(e.target.value)}}
+                value={title}
                 id="movie-title"
                 class="form-field"
                 type="text"
@@ -95,10 +173,10 @@ export default function CreateMovie() {
                 name="title"
             />
             {/* Uncomment the next line to show the error message */}
-            {submitted && !values.title ? <span id="title-error">Please enter a movie title</span> : null}
+            {submitted && !title ? <span id="title-error">Please enter a movie title</span> : null}
             <input
-                onChange={handleMovieYearInputChange}
-                value={values.year}
+                onChange={(e) => {setYear(e.target.value)}}
+                value={year}
                 id="movie-year"
                 class="form-field"
                 type="text"
@@ -106,52 +184,125 @@ export default function CreateMovie() {
                 name="year"
             />
             {/* Uncomment the next line to show the error message */}
-            {submitted && !values.year ? <span id="year-error">Please enter a movie year</span> : null}
+            {submitted && !year ? <span id="year-error">Please enter a movie year</span> : null}
+
             <input
-                onChange={handleMovieDescriptionInputChange}
-                value={values.description}
+                onChange={(e) => {setGrade(e.target.value)}}
+                value={grade}
+                id="movie-grade"
+                class="form-field"
+                type="text"
+                placeholder="Grade"
+                name="grade"
+            />
+            {/* Uncomment the next line to show the error message */}
+            {submitted && !grade ? <span id="grade-error">Please enter a movie grade</span> : null}
+
+            <input
+                onChange={(e) => {setDescription(e.target.value)}}
+                value={description}
                 id="movie-description"
                 class="form-field"
                 type="text"
                 placeholder="Description"
                 name="description"
             />
-            {/* Uncomment the next line to show the error message */}
-            {submitted && !values.description ? <span id="description-error">Please enter a movie description</span> : null}
-            <input
-                onChange={handleMovieActorsInputChange}
-                value={values.actors}
-                id="movie-actors"
+              {submitted && !description ? <span id="year-error">Please enter a movie description</span> : null}
+
+              <input
+                onChange={(e) => {setImage(e.target.value)}}
+                value={image}
+                id="movie-image"
                 class="form-field"
                 type="text"
-                placeholder="Actors"
-                name="actors"
+                placeholder="Image"
+                name="image"
             />
-            {/* Uncomment the next line to show the error message */}
-            {submitted && !values.actors ? <span id="actors-error">Please enter a movie actors</span> : null}
-            <div>
-            <p>Select actors</p>
-            <Multiselect
-                isObject={false}
-                onRemove={function noRefCheck() {}}
-                onSelect={function noRefCheck() {}}
-                options={actors.map((actor) => (actor.firstName + " " + actor.lastName
-                    ))}
+
+            <FormControl className={classes.formControl}>
+      <InputLabel id="mutiple-select-label">Select actors</InputLabel>
+      <Select
+        labelId="mutiple-select-label"
+        multiple
+        value={selected}
+        onChange={handleChange}
+        renderValue={(selected) => selected.join(", ")}
+        MenuProps={MenuProps}
+      >
+        <MenuItem
+          value="all"
+          classes={{
+            root: isAllSelected ? classes.selectedAll : ""
+          }}
+        >
+          <ListItemIcon>
+            <Checkbox
+              classes={{ indeterminate: classes.indeterminateColor }}
+              checked={isAllSelected}
+              indeterminate={
+                selected.length > 0 && selected.length < actors.length
+              }
             />
-            </div>
-            <div>
-            <p>Select genres</p>
-            <Multiselect
-                isObject={false}
-                onRemove={function noRefCheck() {}}
-                onSelect={function noRefCheck() {}}
-                options= {genres.map((genre) => (genre.name
-                  ))}
+          </ListItemIcon>
+          <ListItemText
+            classes={{ primary: classes.selectAllText }}
+            primary="Select All"
+          />
+        </MenuItem>
+        {actors.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            <ListItemIcon>
+              <Checkbox checked={selected.indexOf(option.id) > -1} />
+            </ListItemIcon>
+            <ListItemText primary={option.firstName + ' ' + option.lastName} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+
+    <FormControl className={classes.formControl}>
+      <InputLabel id="mutiple-select-genres">Select genres</InputLabel>
+      <Select
+        labelId="mutiple-select-genres"
+        multiple
+        value={selectedGenres}
+        onChange={handleChangeGenres}
+        renderValue={(selectedGenres) => selectedGenres.join(", ")}
+        MenuProps={MenuProps}
+      >
+        <MenuItem
+          value="all"
+          classes={{
+            root: isAllSelectedGenres ? classes.selectedAll : ""
+          }}
+        >
+          <ListItemIcon>
+            <Checkbox
+              classes={{ indeterminate: classes.indeterminateColor }}
+              checked={isAllSelectedGenres}
+              indeterminate={
+                selectedGenres.length > 0 && selectedGenres.length < genres.length
+              }
             />
-            </div>
-            <button class="form-field" type="submit">
-            Add Movie
-            </button>
+          </ListItemIcon>
+          <ListItemText
+            classes={{ primary: classes.selectAllText }}
+            primary="Select All"
+          />
+        </MenuItem>
+        {genres.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
+            <ListItemIcon>
+              <Checkbox checked={selectedGenres.indexOf(option.id) > -1} />
+            </ListItemIcon>
+            <ListItemText primary={option.name} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+            <ColorButton type="submit" variant='contained'>
+            Submit
+            </ColorButton>
         </form>
         </div>
     );

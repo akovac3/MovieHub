@@ -35,12 +35,12 @@ const SingleContent = ({
   const history = useHistory()
 
 
-  function handleEdit() {
-    history.push('/edit-movie')
+  function handleEdit(movieId) {
+   history.push({pathname:'/edit-movie', search: '?id='+movieId,
+      state: { detail: movieId}})
   }
 
-  async function handleAddToWatchlist(movieId){
-    console.log(user)
+ async function handleAddToWatchlist(movieId){
     try{
       await postToWatchlist(watchlistId, movieId)
       message.success('Successfully added to watchlist')
@@ -49,7 +49,9 @@ const SingleContent = ({
     }
   }
   return (
-    <ContentModal media_type={media_type} id={id}>
+    <>
+    <div className='media'>
+      <ContentModal media_type={media_type} id={id}>
 <Badge
         badgeContent={vote_average}
         color={vote_average > 6 ? "primary" : "secondary"}
@@ -66,11 +68,14 @@ const SingleContent = ({
         {media_type === "tv" ? "TV Series" : "Movie"}
         <span className="subTitle">{date}</span>
       </span>
+      </ContentModal>
       {(user && <span className="subTitle">
-        {(role==="ROLE_ADMIN" && <ColorButton variant="outlined" color="secondary" onClick={() =>handleEdit}>Edit</ColorButton>)}
+        {(role==="ROLE_ADMIN" && <ColorButton variant="outlined" color="secondary" onClick={() =>{handleEdit(id)}}>Edit</ColorButton>)}
         {(role==="ROLE_USER" && <ColorButton onClick={() => {handleAddToWatchlist(id)}}>Add to watchlist</ColorButton>)}
       </span>)}
-      </ContentModal>
+    </div>
+</>
+          
       
   );
 };

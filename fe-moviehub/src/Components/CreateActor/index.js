@@ -193,7 +193,7 @@ export default function CustomPaginationActionsTable() {
         setLastError(true)
     }
 
-if(fName && lName){const values = {
+    if(fName && lName){const values = {
             firstName: fName,
             lastName: lName,
             image: img,
@@ -307,7 +307,7 @@ if(fName && lName){const values = {
         </TableFooter>
       </Table>
     </TableContainer>
-    <div className='form-container'>
+    <div className='form-container' >
 
         <Typography
             variant = "h3"
@@ -316,9 +316,8 @@ if(fName && lName){const values = {
             gutterBottom
             > Create new actor</Typography>
 
-    <form noValidate autoComplete='off' onSubmit={handleSubmit} className='register-form'
+    <form noValidate autoComplete='off' onSubmit={handleSubmit} style={{'padding':'10px'}}
 >
-    <Grid item xs={12} sm={6}>
         <TextField
           onChange={(e) => setFName(e.target.value)}
           label="First name"
@@ -326,9 +325,8 @@ if(fName && lName){const values = {
           fullWidth
           error={firstError}
           variant='outlined'
-          className={classes.field}
-        /> </Grid>
-            <Grid item xs={12} sm={6}>
+          style={{'marginBottom':'50px'}}
+        /> 
         <TextField
                onChange={(e) => setLName(e.target.value)}
                label="Last name"
@@ -336,10 +334,8 @@ if(fName && lName){const values = {
                fullWidth
                error={lastError}
                variant='outlined'
-               className={classes.field}
-        /> </Grid>
-
-<Grid item xs={12} sm={6}>
+               style={{'marginBottom':'50px'}}
+        /> 
 
         <TextField
                     onChange={(e) => setImg(e.target.value)}
@@ -347,8 +343,8 @@ if(fName && lName){const values = {
                     required
                     fullWidth
                     variant='outlined'
-                    className={classes.field}
-        /> </Grid>
+                    style={{'marginBottom':'50px'}}
+        /> 
         <ColorButton type='submit' variant='contained'>Submit</ColorButton>
 
         </form>

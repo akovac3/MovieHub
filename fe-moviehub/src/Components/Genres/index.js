@@ -26,6 +26,7 @@ import { message } from 'antd'
 import {postGenre} from '../../Api/Movie/movie'
 import {getAllGenres} from '../../Api/Movie/movie'
 import { orange } from '@material-ui/core/colors';
+import './Genres.css'
 
 const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(orange[500]),
@@ -275,7 +276,7 @@ export default function CustomPaginationActionsTable() {
         </TableFooter>
       </Table>
     </TableContainer>
-    <Container>
+    <div className='form-container' >
         <Typography
             variant = "h3"
             color='secondary'
@@ -283,7 +284,7 @@ export default function CustomPaginationActionsTable() {
             gutterBottom
             > Create new genre</Typography>
 
-    <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+    <form noValidate autoComplete='off' onSubmit={handleSubmit} style={{'padding':'10px'}}>
         <TextField
           onChange={(e) => setName(e.target.value)}
           label="Name"
@@ -291,13 +292,12 @@ export default function CustomPaginationActionsTable() {
          fullWidth
           error={firstError}
           variant='outlined'
-          className={classes.field}
+          style={{'marginBottom':'50px'}}
         />
         <ColorButton type='submit' variant='contained'>Submit</ColorButton>
 
         </form>
-    </Container>
-    
+    </div>
     </>
   );
 }

@@ -17,7 +17,18 @@ import { loginUrl, homeUrl } from '../../utilities/appUrls'
 import { setSession } from '../../utilities/localStorage'
 import { useUserContext } from '../../AppContext'
 import axios from 'axios';
+import { orange } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
 
+
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(orange[500]),
+  backgroundColor: orange[500],
+  '&:hover': {
+    backgroundColor: orange[800]
+  },
+}));
 
 function Copyright(props) {
   return (
@@ -54,14 +65,10 @@ export default function Register() {
       const response = await signUp(values)
       message.success('Successfully registered')
       setLoading(false)
-      console.log(response.id)
-     // const newUser = await getUserAgain(response.id);
-      //console.log(newUser.data)
-      console.log(response)
       setSession(response)
       setRole(response.roles[0].name)
-      history.goBack()
      setLoggedIn(true)
+     history.goBack()
     } catch (error) {
       setLoading(false)
       console.log(error)
@@ -79,7 +86,6 @@ export default function Register() {
       lastName: data.get('lastName'),
       email: data.get('email'),
     }
-    console.log(values)
     onFinish(values)
   }
 
@@ -96,7 +102,7 @@ export default function Register() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: orange[500]}}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
@@ -160,15 +166,16 @@ export default function Register() {
                 />
               </Grid>
             </Grid>
-            <Button
+            <ColorButton
               type='submit'
               fullWidth
               variant='contained'
               loading={loading}
               sx={{ mt: 3, mb: 2 }}
+              style={{ 'marginTop':'20px', 'padding':'10px'}}
             >
               Sign Up
-            </Button>
+            </ColorButton>
             <Grid container justifyContent='center'>
               <Grid item>
                 <Link href={loginUrl} variant='body2'>

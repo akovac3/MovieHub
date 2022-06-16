@@ -18,6 +18,18 @@ import { registerUrl, homeUrl} from "../../utilities/appUrls";
 import { login } from "../../Api/User/auth";
 import { getRememberInfo, removeRememberInfo, setRememberInfo, setSession } from "../../utilities/localStorage";
 import { useUserContext } from "../../AppContext";
+import { orange } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
+
+
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(orange[500]),
+  backgroundColor: orange[500],
+  '&:hover': {
+    backgroundColor: orange[800]
+  },
+}));
 
 
 function Copyright(props) {
@@ -94,7 +106,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: orange[500] }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
@@ -142,15 +154,16 @@ export default function SignIn() {
               }
               label='Remember me'
             />
-            <Button
+            <ColorButton
               loading={loading}
               type='submit'
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
+              style={{ 'marginTop':'20px', 'padding':'10px'}}
             >
               Log In
-            </Button>
+            </ColorButton>
             <Grid container justifyContent='center'>
               <Grid item>
                 <Link href={registerUrl}>

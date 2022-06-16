@@ -65,11 +65,13 @@ export default function Gallery() {
     async function fetchData() {
         try {
           const response = await getAllMovies()
-          const watchlistResponse = await getWatchlistId()
+          if(user) {
+            const watchlistResponse = await getWatchlistId()
+            setWatchlistId(watchlistResponse.data)
+          }
 
           console.log(response.data)
           setMovies(response.data)
-          setWatchlistId(watchlistResponse.data)
         } catch (e) {
           console.error(e)
         }

@@ -3,6 +3,7 @@ import {
     basicPost,
     basicGetGallery,
     basicPostGallery,
+    basicPut,
   } from '../ApiClient'
   
   const movieApi = '/movie/api/movie/'
@@ -27,6 +28,14 @@ import {
 
   export const postActor = async (data) => {
     return await basicPost(actorsApi, data)
+  }
+
+  export const postMovie = async (data) => {
+    return await basicPost(movieApi, data)
+  }
+
+  export const putMovie = async (data) => {
+    return await basicPut(movieApi, data)
   }
 
   export const getAllGenres = async () => {

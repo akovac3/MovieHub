@@ -50,14 +50,31 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateMovie(@PathVariable long id,@Valid @RequestBody Movie movieDetails) {
+    public ResponseEntity<String> updateMovie(@PathVariable long id,@Valid @RequestBody MovieRequest movieDetails) {
         Movie updateMovie = movieService.findById(id);
         updateMovie.setTitle(movieDetails.getTitle());
         updateMovie.setGrade(movieDetails.getGrade());
         updateMovie.setDescription(movieDetails.getDescription());
         updateMovie.setYear(movieDetails.getYear());
-        updateMovie.setActors(movieDetails.getActors());
-        updateMovie.setGenres(movieDetails.getGenres());
+
+        Set<Long> actorsSet = movieDetails.getActors();
+        Set<Long> genresSet = movieDetails.getGenres();
+
+        Set<Actor> actors = new HashSet<>();
+        actorsSet.forEach(actor -> {
+            Actor novi = actorRepository.findById(actor)
+                    .orElseThrow(() -> new RuntimeException("Error: Actor not found."));
+            actors.add(novi);
+        });
+        updateMovie.setActors(actors);
+
+        Set<Genre> genres = new HashSet<>();
+        genresSet.forEach(genre -> {
+            Genre novi = genreRepository.findById(genre)
+                    .orElseThrow(() -> new RuntimeException("Error: Genre not found."));
+            genres.add(novi);
+        });
+        updateMovie.setGenres(genres);
 
         movieService.save(updateMovie);
 

@@ -17,7 +17,7 @@ export const basicPost = async (url, data) => {
 
 
 export const basicPut = async (url, data) => {
-  return (await axios.put(hostUrl + url, data, getAuthConfig())).data
+  return (await axios.put(hostUrl + url, data)).data
 }
 
 export const getAuthConfig = () => {
