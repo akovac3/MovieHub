@@ -12,4 +12,4 @@ Admin aplikacije će imati mogućnosti kreiranja filmove, glumaca i zanrova kao 
 - Rijad Handžić
 
 Kratki video aplikacije možete naći na sljedećem linku:
-https://drive.google.com/drive/folders/1xq3nLt8drdgMnPutH2wnJfuDA0HrUGb4?usp=sharing
+https://drive.google.com/file/d/1Wr0BRwO1dANeBxz0MgmgLwfKBP_5dzmx/view?usp=sharing
