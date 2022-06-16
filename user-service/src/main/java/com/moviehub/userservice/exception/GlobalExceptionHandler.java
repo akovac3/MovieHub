@@ -62,5 +62,4 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails("Not found",apiError.getMessage());
         return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
     }
-    //java.lang.NumberFormatException
 }

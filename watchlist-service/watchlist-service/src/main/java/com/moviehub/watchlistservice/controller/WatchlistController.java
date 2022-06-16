@@ -47,9 +47,4 @@ public class WatchlistController {
         return new ResponseEntity<String>("Movie is saved to watchlist!", HttpStatus.CREATED);
     }
 
-   /* @GetMapping(path = "/watchlist/user/{userId}")
-    public ResponseEntity<List<Watchlist>> getAllWatchlistsForUser(@PathVariable(value = "userId") Long userId) {
-        return ResponseEntity.ok(watchlistService.getWatchlistByUserId(userId));
-    }*/
-
 }

@@ -44,8 +44,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     }
 
-    //ako je login uspjesan salje access i refresh token
-    //u responsu se salju tokeni
+    //u responsu se salje token
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         //da dohvati uspjesno logovanog korisnika
@@ -63,8 +62,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30*60*1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
-        //response.setHeader("access_token",accessToken);
-        //response.setHeader("refresh_token",refreshToken);
         Map<String,String> tokens = new HashMap<>();
         tokens.put("access_token",accessToken);
         tokens.put("refresh_token",refreshToken);

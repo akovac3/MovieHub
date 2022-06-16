@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-//for get the token and forward to AuthenticationManager
 
 @AllArgsConstructor
 @Component

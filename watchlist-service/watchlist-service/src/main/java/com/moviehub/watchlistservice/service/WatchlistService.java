@@ -79,7 +79,6 @@ public class WatchlistService {
 
     public Watchlist add(AddWatchlistRequest request) {
         Watchlist watchlist = new Watchlist();
-       // watchlist.setUserId(request.userId());
         watchlist.setName(request.name());
         registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/", "200");
         return watchlistRepository.save(watchlist);
@@ -155,12 +154,7 @@ public class WatchlistService {
         registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/add", "400");
         throw new BadRequestException("User not found");
     }
-
-   /* public List<Watchlist> getWatchlistByUserId(Long userId) {
-        registerEvent(EventRequest.actionType.GET, "/api/watchlist/user/{userId}", "200");
-        return watchlistRepository.findAll().stream().filter(r -> r.getUserId() == userId).toList();
-    }*/
-
+    
     public static void registerEvent(EventRequest.actionType actionType, String resource, String status) {
         ManagedChannel channel = ManagedChannelBuilder.forAddress(grpcUrl, grpcPort)
                 .usePlaintext()

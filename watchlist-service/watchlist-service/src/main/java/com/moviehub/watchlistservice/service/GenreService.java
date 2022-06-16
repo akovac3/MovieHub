@@ -1,77 +1,95 @@
 package com.moviehub.watchlistservice.service;
-
-import com.moviehub.watchlistservice.POJO.Genre.AddGenreRequest;
-import com.moviehub.watchlistservice.POJO.Genre.AddMovieForGenreRequest;
+import com.google.protobuf.Timestamp;
 import com.moviehub.watchlistservice.entity.Genre;
-import com.moviehub.watchlistservice.entity.Movie;
-import com.moviehub.watchlistservice.entity.Watchlist;
-import com.moviehub.watchlistservice.exceptions.BadRequestException;
+import com.moviehub.watchlistservice.event.EventRequest;
+import com.moviehub.watchlistservice.event.EventResponse;
+import com.moviehub.watchlistservice.event.EventServiceGrpc;
+import com.moviehub.watchlistservice.exceptions.ResourceNotFoundException;
 import com.moviehub.watchlistservice.repository.GenreRepository;
-import com.moviehub.watchlistservice.repository.MovieRepository;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
 public class GenreService {
-
     @Autowired
     private GenreRepository genreRepository;
 
-    @Autowired
-    private MovieRepository movieRepository;
+    private static String grpcUrl;
+    private static int grpcPort;
 
-    public Iterable<Genre> findAll() {
+    @Value("${app.grpc-url}")
+    public void setGrpcUrl(String grpcUrl) {
+        GenreService.grpcUrl = grpcUrl;
+    }
+
+    @Value("${app.grpc-port}")
+    public void setGrpcPort(int grpcPort) {
+        GenreService.grpcPort = grpcPort;
+    }
+
+    public Iterable<Genre> getAll() {
+        registerEvent(EventRequest.actionType.GET,"/api/genre/", "200");
         return genreRepository.findAll();
     }
 
     public Genre findById(Long id) {
-        Optional<Genre> res = genreRepository.findById(id);
-        if(res.isPresent()) {
-            return res.get();
+        Optional<Genre> genre = genreRepository.findById(id);
+        if (genre.isPresent()) {
+            registerEvent(EventRequest.actionType.GET, "/api/genre/{id}", "200");
+            return genre.get();
         } else {
-            throw new BadRequestException("There is no Genre with id = " + id);
+            registerEvent(EventRequest.actionType.GET, "/api/genre/{id}", "400");
+            throw new ResourceNotFoundException("Genre with provided id not found!");
         }
     }
 
-    public void save(Genre genre) {
-        genreRepository.save(genre);
-    }
-
-    public Genre add(AddGenreRequest request) {
-        Genre genre = new Genre();
-        genre.setName(request.name());
+    public Genre save(Genre genre) {
+        registerEvent(EventRequest.actionType.CREATE, "/api/genre/", "200");
         return genreRepository.save(genre);
     }
 
-    public Movie addMovieForGenre(Long genreId, AddMovieForGenreRequest request) {
-        Optional<Movie> movieOptional = movieRepository.findById(request.movieId());
-        Optional<Genre> genreOptional = genreRepository.findById(genreId);
-
-        if(request.movieId() != 0 && !movieOptional.isPresent()) {
-            throw new BadRequestException("Moview with id=" + request.movieId() + " is missing");
+    public void remove(Long id){
+        if (!genreRepository.existsById(id)) {
+            registerEvent(EventRequest.actionType.DELETE, "/api/genre/{id}", "400");
+            throw new ResourceNotFoundException("Genre with id= " + id+ " does not exist");
         }
-        if(!genreOptional.isPresent()) {
-            throw new BadRequestException("Genre with id=" + genreId + " is missing");
-        }
-
-        Genre genre = genreOptional.get();
-        if(request.movieId() != 0) {
-            Movie _movie = movieRepository.findById(request.movieId())
-                    .orElseThrow(() ->new BadRequestException("Not found movie with id = " + request.movieId()));
-            //genre.getMovies().add(_movie);
-            genreRepository.save(genre);
-            return _movie;
-        }
-        Movie m = new Movie();
-        m.setTitle(request.name());
-        m.setGrade(request.grade());
-        m.setDescription(request.textDescription());
-        //genre.getMovies().add(m);
-        genreRepository.save(genre);
-
-        return m;
+        registerEvent(EventRequest.actionType.DELETE, "/api/genre/{id}", "200");
+        genreRepository.deleteById(id);
     }
+
+    public static void registerEvent(EventRequest.actionType actionType, String resource, String status) {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress(grpcUrl, grpcPort)
+                .usePlaintext()
+                .build();
+
+        EventServiceGrpc.EventServiceBlockingStub stub = EventServiceGrpc.newBlockingStub(channel);
+
+        Instant time = Instant.now();
+        Timestamp timestamp = Timestamp.newBuilder().setSeconds(time.getEpochSecond()).setNanos(time.getNano()).build();
+
+        try {
+            EventResponse eventResponse = stub.log(EventRequest.newBuilder()
+                    .setDate(timestamp)
+                    .setMicroservice("Genre service")
+                    .setUser("Unknown")
+                    .setAction(actionType)
+                    .setResource(resource)
+                    .setStatus(status)
+                    .build());
+
+            System.out.println(eventResponse.getMessage());
+        } catch (StatusRuntimeException e) {
+            System.out.println("System event microservice not running");
+        }
+
+        channel.shutdown();
+    }
+
 }

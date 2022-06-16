@@ -5,11 +5,8 @@ import com.moviehub.movieservice.event.EventRequest;
 import com.moviehub.movieservice.event.EventResponse;
 import com.moviehub.movieservice.event.EventServiceGrpc;
 import com.moviehub.movieservice.exception.ResourceNotFoundException;
-import com.moviehub.movieservice.exception.ServiceUnavailableException;
 import com.moviehub.movieservice.model.Actor;
 import com.moviehub.movieservice.model.Movie;
-import com.moviehub.movieservice.model.Role;
-import com.moviehub.movieservice.model.User;
 import com.moviehub.movieservice.repository.ActorRepository;
 import com.moviehub.movieservice.repository.GenreRepository;
 import com.moviehub.movieservice.repository.MovieRepository;
@@ -18,9 +15,7 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
@@ -77,16 +72,6 @@ public class MovieService {
     }
 
     public Movie addMovie(Movie movie){
-        ResponseEntity<User> responseEntity;
-        /*try {
-            responseEntity = restTemplate.getForEntity("http://user-service/api/user/"+movie.getUserId(), User.class);
-
-        } catch (ResourceAccessException exception) {
-            registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "503");
-            throw new ServiceUnavailableException("Error while communicating with another microservice.");
-        }
-        User user = responseEntity.getBody();
-        if(user.getRole()!= Role.ROLE_ADMIN) throw new ResourceNotFoundException("This user can not add movie!");*/
         registerEvent(EventRequest.actionType.CREATE, "/api/movie/", "200");
         return movieRepository.save(movie);
     }
