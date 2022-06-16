@@ -145,7 +145,7 @@ export default function Register() {
                   fullWidth
                   name='username'
                   label='Username'
-                  type='username'
+                  type='text'
                   id='username'
                 />
               </Grid>
