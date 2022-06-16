@@ -5,3 +5,6 @@ Popularnost filmskog svijeta je iz dana u dan sve veća i veća, te da svakodnev
 Pored toga što će aplikacija imati mogućnost pregleda filmova, ona će omogućavati korisnicima da naprave svoj profil, pomoću kojeg će moći dodavati filmove koje žele gledati u  watchlistu.
 
 Admin aplikacije će imati mogućnosti kreiranja filmove, glumaca i zanrova kao i editovanje filma.
+
+Kratki video aplikacije možete naći na sljedećem linku:
+https://drive.google.com/drive/folders/1xq3nLt8drdgMnPutH2wnJfuDA0HrUGb4?usp=sharing
