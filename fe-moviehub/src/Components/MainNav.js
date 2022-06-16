@@ -11,9 +11,11 @@ import { useHistory } from "react-router-dom";
 import { useUserContext } from "../AppContext";
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
-import { removeSession, removeRememberInfo } from '../utilities/localStorage'
+import { removeSession, removeRememberInfo, getUser } from '../utilities/localStorage'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
+import { userRole } from "../utilities/common";
+import axios from "axios";
 
 
 const useStyles = makeStyles({
@@ -32,7 +34,13 @@ export default function SimpleBottomNavigation() {
   const history = useHistory();
   const { loggedIn } = useUserContext()
   const { setLoggedIn, role } = useUserContext()
-  
+  const user = getUser()
+  const [watchlistId, setWatchlistId] = useState('');
+
+      const getWatchlistId = () => {
+        return axios.get("http://localhost:8089/user/api/user/"+user.id+ "/watchlist");
+        }
+
   const handleLogout = () => {
     setLoggedIn(false)
     removeSession()
@@ -41,13 +49,26 @@ export default function SimpleBottomNavigation() {
   }
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const watchlistResponse = await getWatchlistId()
+        setWatchlistId(watchlistResponse.data)
+        console.log(watchlistId)
+      } catch (e) {
+        console.error(e)
+      }
+  }
+  fetchData()
     console.log(role)
     if (value === 0) {
       history.push("/");
     } else if (role==="ROLE_ADMIN" && value === 1) {
       history.push("/create-movie");
     } else if (role==="ROLE_USER" && value === 2){
-        history.push("/watchlist");
+      history.push({pathname:'/watchlist', search: '?id='+watchlistId,
+      state: { detail: watchlistId }
+});
+
     }
      else if ( role==="ROLE_ADMIN" && value === 3) {
       history.push("/actors");

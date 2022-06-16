@@ -79,42 +79,35 @@ public class WatchlistService {
 
     public Watchlist add(AddWatchlistRequest request) {
         Watchlist watchlist = new Watchlist();
-        watchlist.setUserId(request.userId());
+       // watchlist.setUserId(request.userId());
         watchlist.setName(request.name());
         registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/", "200");
         return watchlistRepository.save(watchlist);
     }
 
-    public Movie addMovieToWatchlist(Long watchlistId, AddMovieToWatchlistRequest request) {
-        Optional<Movie> movieOptional = movieRepository.findById(request.movieId());
+    public void addMovieToWatchlist(Long watchlistId, Long movieId) {
+        Optional<Movie> movieOptional = movieRepository.findById(movieId);
         Optional<Watchlist> watchlistOptional = watchlistRepository.findById(watchlistId);
 
-        if(request.movieId() != 0 && !movieOptional.isPresent()) {
-            registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie", "503");
-            throw new BadRequestException("Movie with id=" + request.movieId() + " is missing");
+        if(movieId != 0 && !movieOptional.isPresent()) {
+            registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie/{movieId}", "503");
+            throw new BadRequestException("Movie with id=" + movieId + " is missing");
         }
         if(!watchlistOptional.isPresent()) {
-            registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie", "503");
+            registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie/{movieId}", "503");
             throw new BadRequestException("Watchlist with id=" + watchlistId + " is missing");
         }
 
         Watchlist watchlist = watchlistOptional.get();
 
-        if(request.movieId() != 0) {
-            Movie _movie = movieRepository.findById(request.movieId())
-                    .orElseThrow(() -> new BadRequestException("Not found movie with id = " + request.movieId()));
+        if(movieId != 0) {
+            Movie _movie = movieRepository.findById(movieId)
+                    .orElseThrow(() -> new BadRequestException("Not found movie with id = " + movieId));
             watchlist.getMovies().add(_movie);
             watchlistRepository.save(watchlist);
-            return _movie;
         }
-        Movie m = new Movie();
-        m.setName(request.name());
-        m.setGrade(request.grade());
-        m.setTextDescription(request.textDescription());
-        watchlist.getMovies().add(m);
-        registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie", "200");
+        registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/{watchlistId}/movie/{movieId}", "200");
         watchlistRepository.save(watchlist);
-        return m;
     }
 
     public Movie removeMovieFromWatchlist(Long movieId, Long watchlistId) {
@@ -133,6 +126,11 @@ public class WatchlistService {
         return movieOptional.get();
     }
 
+    public Watchlist addWatchlist(String name) {
+        Watchlist watchlist = new Watchlist(name);
+        return watchlistRepository.save(watchlist);
+    }
+
     public Watchlist addNewWatchlist(AddWatchlistRequest request) {
         User user = null;
         if(request.userId() != null) {
@@ -148,7 +146,7 @@ public class WatchlistService {
         }
         if(user != null) {
             Watchlist watchlist = new Watchlist();
-            watchlist.setUserId(request.userId());
+           // watchlist.setUserId(request.userId());
             watchlist.setName(request.name());
             registerEvent(EventRequest.actionType.CREATE, "/api/watchlist/add", "200");
             watchlistRepository.save(watchlist);
@@ -158,10 +156,10 @@ public class WatchlistService {
         throw new BadRequestException("User not found");
     }
 
-    public List<Watchlist> getWatchlistByUserId(Long userId) {
+   /* public List<Watchlist> getWatchlistByUserId(Long userId) {
         registerEvent(EventRequest.actionType.GET, "/api/watchlist/user/{userId}", "200");
         return watchlistRepository.findAll().stream().filter(r -> r.getUserId() == userId).toList();
-    }
+    }*/
 
     public static void registerEvent(EventRequest.actionType actionType, String resource, String status) {
         ManagedChannel channel = ManagedChannelBuilder.forAddress(grpcUrl, grpcPort)

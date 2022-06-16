@@ -43,9 +43,9 @@ public class MovieService {
 
     public Movie add(AddMovieRequest request) {
         Movie movie = new Movie();
-        movie.setName(request.name());
+        movie.setTitle(request.name());
         movie.setGrade(request.grade());
-        movie.setTextDescription(request.textDescription());
+        movie.setDescription(request.textDescription());
         return movieRepository.save(movie);
     }
 
@@ -77,8 +77,8 @@ public class MovieService {
             return _actor;
         }
         Actor a = new Actor();
-        a.setName(request.name());
-        a.setLastname(request.lastname());
+        a.setFirstName(request.name());
+        a.setLastName(request.lastname());
         movie.getActors().add(a);
         movieRepository.save(movie);
         return a;

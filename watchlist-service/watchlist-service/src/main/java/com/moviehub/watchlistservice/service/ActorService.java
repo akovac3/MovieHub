@@ -55,7 +55,7 @@ public class ActorService {
 
         Actor actor = actorOptional.get();
 
-        if(request.movieId() != 0) {
+      /*  if(request.movieId() != 0) {
             Movie _movie = movieRepository.findById(request.movieId())
                     .orElseThrow(() -> new BadRequestException("Not found movie with id = " + request.movieId()));
             actor.getMovies().add(_movie);
@@ -67,14 +67,19 @@ public class ActorService {
         m.setGrade(request.grade());
         m.setTextDescription(request.textDescription());
         actor.getMovies().add(m);
-        actorRepostory.save(actor);
+        actorRepostory.save(actor);*/
+
+        Movie m = new Movie();
+        m.setTitle(request.name());
+        m.setGrade(request.grade());
+        m.setDescription(request.textDescription());
         return m;
     }
 
     public Actor add(AddActorRequest request) {
         Actor actor = new Actor();
-        actor.setName(request.name());
-        actor.setLastname(request.lastname());
+        actor.setFirstName(request.name());
+        actor.setLastName(request.lastname());
         return actorRepostory.save(actor);
     }
 }

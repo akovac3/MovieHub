@@ -24,6 +24,7 @@ import SingleContent from "../SingleContent/SingleContent";
 import { removeSession } from '../../utilities/localStorage'
 import { useUserContext } from '../../AppContext'
 import SimpleBottomNavigation from '../Nav';
+import { getUser } from '../../utilities/localStorage';
 
 
 import './landing.css'
@@ -47,23 +48,28 @@ const theme = createTheme();
 
 export default function Gallery() {
     const [movies, setMovies] = useState(null);
-    const [genres, setGenres] = useState([]);
-    const [selectedGenres, setSelectedGenres] = useState([]);
-    const [page, setPage] = useState(1);
-    const [content, setContent] = useState([]);
-    const [numOfPages, setNumOfPages] = useState();
+    const user = getUser()
+    const [watchlistId, setWatchlistId] = useState('');
 
     const getAllMovies = () => {
         return axios.get("http://localhost:8089/movie/api/movie/");
         }
+
+        const getWatchlistId = () => {
+          return axios.get("http://localhost:8089/user/api/user/"+user.id+ "/watchlist");
+          }
+
 
   useEffect(() => {
     window.scroll(0, 0);
     async function fetchData() {
         try {
           const response = await getAllMovies()
+          const watchlistResponse = await getWatchlistId()
+
           console.log(response.data)
           setMovies(response.data)
+          setWatchlistId(watchlistResponse.data)
         } catch (e) {
           console.error(e)
         }
@@ -84,6 +90,7 @@ export default function Gallery() {
               date={c.year|| c.release_date}
               media_type="movie"
               vote_average={c.grade}
+              watchlistId= {watchlistId}
             />
           ))}
       </div>

@@ -20,7 +20,11 @@ import { getAllMovies } from '../../Api/Movie/movie';
 import axios from 'axios';
 import { Table } from 'antd';
 import Column from 'antd/lib/table/Column';
+import {getAllMoviesFromWatchlist} from '../../Api/Watchlist/watchlist'
+import ContentWatchlist from "../ContentWatchlist/ContentWatchlist";
 import './watchlist.css'
+import { useLocation, useHistory} from "react-router-dom";
+
 
 function Copyright() {
   return (
@@ -35,19 +39,26 @@ function Copyright() {
   );
 }
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const theme = createTheme();
-
-export default function Watchlists() {
+export default function Watchlist(){
     const [movies, setMovies] = useState(null);
+    const location = useLocation();
+    const history = useHistory();
 
   useEffect(() => {
+    
+    const search = location.search;
+    const id = location.state.detail;
+
+    
+    const getAllMovies = () => {
+      return axios.get('http://localhost:8089/main/api/watchlist/'+id)
+      }
+
     async function fetchData() {
         try {
           const response = await getAllMovies()
-          console.log(response.data)
-          setMovies(response.data)
+          setMovies(response.data.movies)
         } catch (e) {
           console.error(e)
         }
@@ -56,7 +67,22 @@ export default function Watchlists() {
   }, [])
 
   return (
-  <> <h1 style={{'color':'white'}}>Naslov</h1>
-  </>
+  
+    <> <h1 className='pageTitle'>Movies</h1>
+    <div className="trending">
+         {movies &&
+           movies.map((c) => (
+             <ContentWatchlist
+               key={c.id}
+               id={c.id}
+               poster={c.image}
+               title={c.title || c.name}
+               date={c.year|| c.release_date}
+               media_type="movie"
+               vote_average={c.grade}
+             />
+           ))}
+       </div>
+   </>
   );
 }

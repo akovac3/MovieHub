@@ -4,7 +4,7 @@ import javax.persistence.Column;
 
 public record AddMovieRequest(
         String name,
-        Double grade,
+        Float grade,
         String textDescription
 ) {
 }

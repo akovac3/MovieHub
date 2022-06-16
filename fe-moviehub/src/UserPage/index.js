@@ -82,7 +82,7 @@ sx={{ mt: 3 }}
 >
 <Grid container spacing={2}>
 <Grid item xs={12}>
-  <div className="App"  style={{
+  <div className="App"  style={{ display:'block',
     alignItems: 'center'}}>
 </div>
   </Grid> 
@@ -93,7 +93,6 @@ sx={{ mt: 3 }}
       id='firstName'
       label='First Name'
       name='firstName'
-      autoComplete
     />
   </Grid>
   <Grid item xs={12} sm={6}>
@@ -103,18 +102,16 @@ sx={{ mt: 3 }}
       id='lastName'
       label='Last Name'
       name='lastName'
-      autoComplete
     />
   </Grid>
   <Grid item xs={12}>
     <TextField
-      value={userProfile.email} 
+      value={user.email} 
       fullWidth
       id='email'
       label='Email Address'
       name='email'
     />
-  </Grid>
   </Grid>
   <Grid item xs={12}>
     <TextField
@@ -122,9 +119,9 @@ sx={{ mt: 3 }}
       fullWidth
       name='username'
       label='Username'
-      type='username'
       id='username'
     />
+  </Grid>
   </Grid>
 </Box>
 </Container>

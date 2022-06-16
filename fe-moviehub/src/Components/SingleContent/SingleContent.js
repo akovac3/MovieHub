@@ -6,6 +6,20 @@ import { Button } from "@material-ui/core";
 import { getUser } from "../../utilities/localStorage";
 import { userRole } from "../../utilities/common";
 import { useHistory } from "react-router-dom";
+import { styled } from '@mui/material/styles';
+import { orange } from '@mui/material/colors';
+import { postToWatchlist } from "../../Api/Watchlist/watchlist";
+import { message } from 'antd'
+
+
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.getContrastText(orange[500]),
+  backgroundColor: orange[500],
+  '&:hover': {
+    backgroundColor: orange[800]
+  },
+}));
+
 
 const SingleContent = ({
   id,
@@ -14,6 +28,7 @@ const SingleContent = ({
   date,
   media_type,
   vote_average,
+  watchlistId,
 }) => {
   const user = getUser();
   const role = userRole();
@@ -24,8 +39,14 @@ const SingleContent = ({
     history.push('/edit-movie')
   }
 
-  function handleAddToWatchlist(){
-
+  async function handleAddToWatchlist(movieId){
+    console.log(user)
+    try{
+      await postToWatchlist(watchlistId, movieId)
+      message.success('Successfully added to watchlist')
+    } catch(error){
+      console.error(error)
+    }
   }
   return (
     <ContentModal media_type={media_type} id={id}>
@@ -46,10 +67,11 @@ const SingleContent = ({
         <span className="subTitle">{date}</span>
       </span>
       {(user && <span className="subTitle">
-        {(role==="ROLE_ADMIN" && <Button variant="outlined" color="secondary" onClick={handleEdit}>Edit</Button>)}
-        {(role==="ROLE_USER" && <Button onClick={handleAddToWatchlist}>Add to watchlist</Button>)}
+        {(role==="ROLE_ADMIN" && <ColorButton variant="outlined" color="secondary" onClick={() =>handleEdit}>Edit</ColorButton>)}
+        {(role==="ROLE_USER" && <ColorButton onClick={() => {handleAddToWatchlist(id)}}>Add to watchlist</ColorButton>)}
       </span>)}
       </ContentModal>
+      
   );
 };
 

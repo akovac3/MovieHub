@@ -1,8 +1,10 @@
 package com.moviehub.userservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.moviehub.userservice.model.AuthRequest;
 import com.moviehub.userservice.model.AuthResponse;
 import com.moviehub.userservice.model.User;
+import com.moviehub.userservice.rabbitMq.RabbitMQSender;
 import com.moviehub.userservice.response.LoginResponseBody;
 import com.moviehub.userservice.security.JWTUtil;
 import com.moviehub.userservice.security.PBKDF2Encoder;
@@ -28,6 +30,7 @@ public class AuthenticationREST {
     private PBKDF2Encoder passwordEncoder;
     private UserService userService;
     private AuthService authService;
+    private RabbitMQSender rabbitMQSender;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseBody> login(@RequestBody AuthRequest ar) {
@@ -44,7 +47,8 @@ public class AuthenticationREST {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getRoles()
+                    user.getRoles(),
+                    user.getWatchlistId()
             ));
         }
         else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -52,8 +56,16 @@ public class AuthenticationREST {
 
     @PostMapping("/signup")
     public ResponseEntity<LoginResponseBody> signup(@RequestBody @Valid User signupRequest) {
+
         User user = authService.signup(signupRequest);
         String token = jwtUtil.generateToken(user);
+        try {
+            rabbitMQSender.send(user.getUserID().toString());
+        } catch (JsonProcessingException e) {
+            userService.removeUser(user.getUserID());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok().body(new LoginResponseBody(
                 "Bearer",
                 token,
@@ -64,7 +76,8 @@ public class AuthenticationREST {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRoles()
+                user.getRoles(),
+                user.getWatchlistId()
         ));
     }
 
@@ -82,7 +95,8 @@ public class AuthenticationREST {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getRoles()
+                user.getRoles(),
+                user.getWatchlistId()
         ));
     }
 

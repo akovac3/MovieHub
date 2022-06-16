@@ -73,6 +73,9 @@ public class UserService {
         return null;
     }
 
+    public void removeUser(UUID id){
+        userRepository.deleteById(id);
+    }
 
 }
 

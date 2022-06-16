@@ -1,17 +1,17 @@
 package com.moviehub.watchlistservice.rabbitMq;
 
-import com.moviehub.watchlistservice.entity.Movie;
-
 public class RabbitMQStatus {
     private int status;
-    private Long movie;
+    private Long watchlistId;
+    private String userId;
 
     public RabbitMQStatus() {
     }
 
-    public RabbitMQStatus(int status, Long id) {
+    public RabbitMQStatus(int status, Long id, String userId) {
         this.status = status;
-        this.movie = id;
+        this.watchlistId = id;
+        this.userId = userId;
     }
 
     public int getStatus() {
@@ -22,11 +22,19 @@ public class RabbitMQStatus {
         this.status = status;
     }
 
-    public Long getMovie() {
-        return movie;
+    public Long getWatchlistId() {
+        return watchlistId;
     }
 
-    public void setMovie(Long movie) {
-        this.movie = movie;
+    public void setWatchlistId(Long watchlistId) {
+        this.watchlistId = watchlistId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

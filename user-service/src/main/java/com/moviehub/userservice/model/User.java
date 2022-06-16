@@ -73,6 +73,7 @@ public class User {
 
     @CreationTimestamp
     LocalDateTime timestamp;
+    private Long watchlistId;
 
     public User(String username, String encode, String firstName, String lastName, String email) {
         this.username = username;
@@ -154,6 +155,13 @@ public class User {
         this.timestamp = timestamp;
     }
 
+    public Long getWatchlistId() {
+        return watchlistId;
+    }
+
+    public void setWatchlistId(Long watchlistId) {
+        this.watchlistId = watchlistId;
+    }
 }
 
 /*

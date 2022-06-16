@@ -23,10 +23,6 @@ public class Watchlist {
     private Long watchlistId;
 
     @NotNull
-    @Column(name="UserID")
-    private Long userId;
-
-    @NotNull
     @Column(name="Name")
     private String name;
 
@@ -37,4 +33,7 @@ public class Watchlist {
             inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> movies = new HashSet<>();
 
+    public Watchlist(String name) {
+        this.name = name;
+    }
 }

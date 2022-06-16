@@ -61,15 +61,15 @@ public class GenreService {
         if(request.movieId() != 0) {
             Movie _movie = movieRepository.findById(request.movieId())
                     .orElseThrow(() ->new BadRequestException("Not found movie with id = " + request.movieId()));
-            genre.getMovies().add(_movie);
+            //genre.getMovies().add(_movie);
             genreRepository.save(genre);
             return _movie;
         }
         Movie m = new Movie();
-        m.setName(request.name());
+        m.setTitle(request.name());
         m.setGrade(request.grade());
-        m.setTextDescription(request.textDescription());
-        genre.getMovies().add(m);
+        m.setDescription(request.textDescription());
+        //genre.getMovies().add(m);
         genreRepository.save(genre);
 
         return m;

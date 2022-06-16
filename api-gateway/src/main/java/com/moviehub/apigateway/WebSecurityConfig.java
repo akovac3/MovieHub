@@ -51,8 +51,10 @@ public class WebSecurityConfig {
                 .pathMatchers(HttpMethod.GET, "/movie/api/genre/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/movie/api/movie/**").permitAll()
                 .pathMatchers(HttpMethod.POST, "/movie/api/movie/").permitAll()
+                .pathMatchers(HttpMethod.GET, "/main/api/watchlist/**").permitAll()
+                .pathMatchers(HttpMethod.POST, "/main/api/watchlist/**").permitAll()
                 .pathMatchers("/user/api/user", "/user/api/service", "/user/api/role").permitAll()
-                .pathMatchers("/main/api/watchlist").hasAuthority("ROLE_USER")
+                .pathMatchers(HttpMethod.GET, "/user/api/user/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "main/api/watchlist/{id}").hasAuthority("ROLE_ADMIN")
                 .anyExchange().authenticated()
                 .and().build();

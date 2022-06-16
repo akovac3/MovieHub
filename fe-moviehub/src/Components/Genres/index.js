@@ -25,7 +25,15 @@ import { Container, makeStyles } from '@material-ui/core';
 import { message } from 'antd'
 import {postGenre} from '../../Api/Movie/movie'
 import {getAllGenres} from '../../Api/Movie/movie'
+import { orange } from '@material-ui/core/colors';
 
+const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    backgroundColor: orange[500],
+    '&:hover': {
+      backgroundColor: orange[800]
+    },
+  }));
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -162,12 +170,11 @@ export default function CustomPaginationActionsTable() {
     if(name == '') {
         setFirstError(true)
     }
-        console.log(name)
-        const values = {
+    if(name) {const values = {
             name: name,
           }
           onFinish(values)
-
+        }
  }
 
 
@@ -286,7 +293,7 @@ export default function CustomPaginationActionsTable() {
           variant='outlined'
           className={classes.field}
         />
-        <Button type='submit' variant='contained'>Submit</Button>
+        <ColorButton type='submit' variant='contained'>Submit</ColorButton>
 
         </form>
     </Container>

@@ -4,5 +4,5 @@ public record AddMovieForActorRequest(
         Long movieId,
         String name,
         String textDescription,
-        Double grade
+        Float grade
 ){}

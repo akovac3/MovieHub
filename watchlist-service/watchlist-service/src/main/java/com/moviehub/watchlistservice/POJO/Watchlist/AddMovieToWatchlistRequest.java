@@ -4,6 +4,6 @@ public record AddMovieToWatchlistRequest(
         Long movieId,
         String name,
         String textDescription,
-        Double grade
+        Float grade
 ) {
 }

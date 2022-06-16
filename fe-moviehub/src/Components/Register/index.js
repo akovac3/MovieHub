@@ -16,6 +16,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { loginUrl, homeUrl } from '../../utilities/appUrls'
 import { setSession } from '../../utilities/localStorage'
 import { useUserContext } from '../../AppContext'
+import axios from 'axios';
+
 
 function Copyright(props) {
   return (
@@ -27,7 +29,7 @@ function Copyright(props) {
     >
       {'Copyright © '}
       <Link color='inherit' href={homeUrl}>
-        movieHub{' '}
+        MovieHub{' '}
       </Link>
       {new Date().getFullYear()}
       {'.'}
@@ -40,8 +42,6 @@ const theme = createTheme()
 export default function Register() {
   const history = useHistory()
   const { setLoggedIn, setRole } = useUserContext()
-  const [lat, setLat] = useState(null)
-  const [lng, setLng] = useState(null)
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState(null)
 
@@ -54,6 +54,10 @@ export default function Register() {
       const response = await signUp(values)
       message.success('Successfully registered')
       setLoading(false)
+      console.log(response.id)
+     // const newUser = await getUserAgain(response.id);
+      //console.log(newUser.data)
+      console.log(response)
       setSession(response)
       setRole(response.roles[0].name)
       history.goBack()

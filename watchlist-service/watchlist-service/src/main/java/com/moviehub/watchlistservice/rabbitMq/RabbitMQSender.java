@@ -4,6 +4,7 @@ package com.moviehub.watchlistservice.rabbitMq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviehub.watchlistservice.entity.Movie;
+import com.moviehub.watchlistservice.entity.Watchlist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,19 +32,19 @@ public class RabbitMQSender {
         this.directExchange = directExchange;
     }
 
-    public void send() throws JsonProcessingException {
-        logger.info("Storing notification (routing key = info, status = 1)");
-        rabbitTemplate.setExchange(directExchange);
-        ObjectMapper objectMapper = new ObjectMapper();
-        rabbitTemplate.convertAndSend(routingKeyInfo, objectMapper.writeValueAsString(new RabbitMQStatus(1, null)));
-        logger.info("Notification stored in queue sucessfully");
-    }
-
-    public void send(Long movie) throws JsonProcessingException {
+    public void send(String userId) throws JsonProcessingException {
         logger.info("Storing notification (routing key = info, status = 0)");
         rabbitTemplate.setExchange(directExchange);
         ObjectMapper objectMapper = new ObjectMapper();
-        rabbitTemplate.convertAndSend(routingKeyInfo, objectMapper.writeValueAsString(new RabbitMQStatus(0, movie)));
+        rabbitTemplate.convertAndSend(routingKeyInfo, objectMapper.writeValueAsString(new RabbitMQStatus(0, null, userId)));
+        logger.info("Notification stored in queue sucessfully");
+    }
+
+    public void send(Watchlist watchlistId) throws JsonProcessingException {
+        logger.info("Storing notification (routing key = info, status = 1)");
+        rabbitTemplate.setExchange(directExchange);
+        ObjectMapper objectMapper = new ObjectMapper();
+        rabbitTemplate.convertAndSend(routingKeyInfo, objectMapper.writeValueAsString(new RabbitMQStatus(1, watchlistId.getWatchlistId(), watchlistId.getName())));
         logger.info("Notification stored in queue sucessfully");
     }
 }

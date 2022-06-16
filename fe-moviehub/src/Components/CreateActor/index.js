@@ -26,6 +26,18 @@ import { Typography } from '@material-ui/core';
 import { Container, makeStyles } from '@material-ui/core';
 import { message } from 'antd'
 import Grid from '@material-ui/core/Grid'
+import { orange } from '@material-ui/core/colors';
+
+import './CreateActor.css'
+
+const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(orange[500]),
+    backgroundColor: orange[500],
+    '&:hover': {
+      backgroundColor: orange[800]
+    },
+  }));
+
 
 
 
@@ -93,9 +105,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-function createData(firstName, lastName, image) {
-  return { firstName, lastName, image };
-}
 
 const columns = [
     { id: 'name', label: 'First name' },
@@ -184,13 +193,13 @@ export default function CustomPaginationActionsTable() {
         setLastError(true)
     }
 
-        console.log(fName, lName)
-        const values = {
+if(fName && lName){const values = {
             firstName: fName,
             lastName: lName,
             image: img,
           }
           onFinish(values)
+        }
 
  }
 
@@ -298,7 +307,8 @@ export default function CustomPaginationActionsTable() {
         </TableFooter>
       </Table>
     </TableContainer>
-    <Container>
+    <div className='form-container'>
+
         <Typography
             variant = "h3"
             color='secondary'
@@ -306,7 +316,7 @@ export default function CustomPaginationActionsTable() {
             gutterBottom
             > Create new actor</Typography>
 
-    <form noValidate autoComplete='off' onSubmit={handleSubmit} sx={{ mt: 3 }}
+    <form noValidate autoComplete='off' onSubmit={handleSubmit} className='register-form'
 >
     <Grid item xs={12} sm={6}>
         <TextField
@@ -339,11 +349,10 @@ export default function CustomPaginationActionsTable() {
                     variant='outlined'
                     className={classes.field}
         /> </Grid>
-        <Button type='submit' variant='contained'>Submit</Button>
+        <ColorButton type='submit' variant='contained'>Submit</ColorButton>
 
         </form>
-    </Container>
-    
+    </div>
     </>
   );
 }

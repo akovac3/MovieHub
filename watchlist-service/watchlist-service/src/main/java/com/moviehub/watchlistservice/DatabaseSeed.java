@@ -27,7 +27,7 @@ public class DatabaseSeed {
     private MovieRepository movieRepository;
     @Autowired
     private WatchlistRepository watchlistRepository;
-
+/*
     @EventListener
     public void seed(final ContextRefreshedEvent event) {
         seedDatabase();
@@ -45,33 +45,33 @@ public class DatabaseSeed {
             createActor("Harrison", "Ford");
             createActor("John", "Travolta");
 
-            createMovie("Kill Bill 1", 8D, "short description");
-            createMovie("Kill Bill 2", 7.5, "short description");
-            createMovie("Pulp Fiction", 9.4, "short description");
-            createMovie("Indiana Jones 1", 8.2, "short description");
-            createMovie("Indiana Jones 2", 8.4, "short description");
-            createMovie("Indiana Jones 3", 8D, "short description");
-            createMovie("Indiana Jones 4", 8D, "short description");
-            createMovie("Die Hard 1", 8.5, "short description");
-            createMovie("Die Hard 2", 8.2, "short description");
-            createMovie("Die Hard 3", 8.9, "short description");
+            createMovie("Kill Bill 1", 8F, "short description");
+            createMovie("Kill Bill 2", 7.5F, "short description");
+            createMovie("Pulp Fiction", 9.4F, "short description");
+            createMovie("Indiana Jones 1", 8.2F, "short description");
+            createMovie("Indiana Jones 2", 8.4F, "short description");
+            createMovie("Indiana Jones 3", 8F, "short description");
+            createMovie("Indiana Jones 4", 8F, "short description");
+            createMovie("Die Hard 1", 8.5F, "short description");
+            createMovie("Die Hard 2", 8.2F, "short description");
+            createMovie("Die Hard 3", 8.9F, "short description");
 
         }
     }
-
+*/
     public Actor createActor(String name, String lastname) {
         Actor actor = new Actor();
-        actor.setName(name);
-        actor.setLastname(lastname);
-        actor.setMovies(new ArrayList<>());
+        actor.setFirstName(name);
+        actor.setLastName(lastname);
+        //actor.s(new ArrayList<>());
         actorRepostory.save(actor);
         return actor;
     }
-    public Movie createMovie(String name, Double grade, String textDescription) {
+    public Movie createMovie(String name, Float grade, String textDescription) {
         Movie movie = new Movie();
-        movie.setName(name);
+        movie.setTitle(name);
         movie.setGrade(grade);
-        movie.setTextDescription(textDescription);
+        movie.setDescription(textDescription);
         movieRepository.save(movie);
         return movie;
     }

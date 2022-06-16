@@ -17,11 +17,12 @@ public class LoginResponseBody {
     private String lastName;
     private String email;
     private List<Role> roles;
+    private Long watchlistId;
 
     public LoginResponseBody() {
     }
 
-    public LoginResponseBody(String tokenType, String jwt, UUID id, String username, LocalDateTime dateCreated, String firstName, String lastName, String email, List<Role> roles) {
+    public LoginResponseBody(String tokenType, String jwt, UUID id, String username, LocalDateTime dateCreated, String firstName, String lastName, String email, List<Role> roles, Long watchlistId) {
         this.tokenType = tokenType;
         this.jwt = jwt;
         this.id = id;
@@ -31,9 +32,10 @@ public class LoginResponseBody {
         this.lastName = lastName;
         this.email = email;
         this.roles = roles;
+        this.watchlistId = watchlistId;
     }
 
-    public LoginResponseBody(String tokenType, String jwt, UUID id, String username, String password, LocalDateTime dateCreated, String firstName, String lastName, String email, List<Role> roles) {
+    public LoginResponseBody(String tokenType, String jwt, UUID id, String username, String password, LocalDateTime dateCreated, String firstName, String lastName, String email, List<Role> roles, Long watchlistId) {
         this.tokenType = tokenType;
         this.jwt = jwt;
         this.id = id;
@@ -44,6 +46,7 @@ public class LoginResponseBody {
         this.lastName = lastName;
         this.email = email;
         this.roles = roles;
+        this.watchlistId = watchlistId;
     }
 
     public String getTokenType() {
@@ -124,5 +127,13 @@ public class LoginResponseBody {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getWatchlistId() {
+        return watchlistId;
+    }
+
+    public void setWatchlistId(Long watchlistId) {
+        this.watchlistId = watchlistId;
     }
 }
